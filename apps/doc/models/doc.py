@@ -51,8 +51,6 @@ class Doc(DocBase):
         return super().delete(*args, **kwargs)
 
     def bind_tags(self, tags: List[dict]) -> None:
-        if not tags:
-            return
         Tag.objects.bulk_create([Tag(name=tag) for tag in tags], ignore_conflicts=True)
         tags = Tag.objects.filter(name__in=tags)
         DocTag.objects.bulk_create([DocTag(tag=tag, doc=self) for tag in tags], ignore_conflicts=True)
