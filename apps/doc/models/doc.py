@@ -1,9 +1,12 @@
 import datetime
+from typing import List
 
 from bkcrypto.contrib.django.fields import SymmetricTextField
 from django.db import models, transaction
 from django.utils.translation import gettext_lazy
 from ovinc_client.core.models import BaseModel, ForeignKey, UniqIDField
+
+from apps.doc.models.tag import DocTag, Tag
 
 
 class DocBase(BaseModel):
@@ -46,6 +49,14 @@ class Doc(DocBase):
         doc_bin.deleted_at = datetime.datetime.now()
         doc_bin.save()
         return super().delete(*args, **kwargs)
+
+    def bind_tags(self, tags: List[dict]) -> None:
+        if not tags:
+            return
+        Tag.objects.bulk_create([Tag(name=tag) for tag in tags], ignore_conflicts=True)
+        tags = Tag.objects.filter(name__in=tags)
+        DocTag.objects.bulk_create([DocTag(tag=tag, doc=self) for tag in tags], ignore_conflicts=True)
+        DocTag.objects.filter(doc=self).exclude(tag__in=tags).delete()
 
 
 class DocBin(DocBase):

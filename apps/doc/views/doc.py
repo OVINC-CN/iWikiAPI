@@ -13,7 +13,7 @@ from ovinc_client.core.viewsets import (
 )
 from rest_framework.response import Response
 
-from apps.doc.models import Doc, DocTag, Tag
+from apps.doc.models import Doc
 from apps.doc.permissions import DocOwnerPermission
 from apps.doc.serializers import DocInfoSerializer, DocListSerializer, EditDocSerializer
 
@@ -66,10 +66,6 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
         serializer.is_valid(raise_exception=True)
         request_data = serializer.validated_data
 
-        # Create Tag
-        Tag.objects.bulk_create([Tag(name=tag) for tag in request_data["tags"]], ignore_conflicts=True)
-        tags = Tag.objects.filter(name__in=request_data["tags"])
-
         # Create Doc
         doc = Doc.objects.create(
             title=request_data["title"],
@@ -82,7 +78,7 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
         )
 
         # Create Doc Tag Relation
-        DocTag.objects.bulk_create([DocTag(tag=tag, doc=doc) for tag in tags], ignore_conflicts=True)
+        doc.bind_tags(tags=request_data["tags"])
 
         return Response()
 
@@ -101,11 +97,7 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
         request_data = serializer.validated_data
 
         # Update Tag
-        tags = request_data.pop("tags", [])
-        Tag.objects.bulk_create([Tag(name=tag) for tag in tags], ignore_conflicts=True)
-        tags = Tag.objects.filter(name__in=tags)
-        DocTag.objects.filter(doc=inst).delete()
-        DocTag.objects.bulk_create([DocTag(tag=tag, doc=inst) for tag in tags], ignore_conflicts=True)
+        inst.bind_tags(request_data.pop("tags", []))
 
         # Update Doc
         for key, val in request_data.items():

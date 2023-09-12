@@ -8,16 +8,6 @@ from apps.doc.models import Doc
 from apps.doc.serializers.tag import TagInfoSerializer
 
 
-class DocInfoSerializer(serializers.ModelSerializer):
-    """
-    Doc Info
-    """
-
-    class Meta:
-        model = Doc
-        fields = "__all__"
-
-
 class DocListSerializer(serializers.ModelSerializer):
     """
     Doc List
@@ -34,7 +24,17 @@ class DocListSerializer(serializers.ModelSerializer):
         exclude = ["content"]
 
     def get_tags(self, instance: Doc) -> List[dict]:
-        return [TagInfoSerializer(instance=tag.tag).data for tag in instance.doctag_set.all()]
+        return [TagInfoSerializer(instance=dt.tag).data["name"] for dt in instance.doctag_set.all()]
+
+
+class DocInfoSerializer(DocListSerializer):
+    """
+    Doc Info
+    """
+
+    class Meta:
+        model = Doc
+        fields = "__all__"
 
 
 class EditDocSerializer(serializers.ModelSerializer):
