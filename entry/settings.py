@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+from bkcrypto.constants import SymmetricCipherType
 from environ import environ
 from ovinc_client.core.logger import get_logging_config_dict
 from ovinc_client.core.utils import getenv_or_raise, strtobool
@@ -40,7 +41,9 @@ INSTALLED_APPS = [
     "sslserver",
     "ovinc_client.account",
     "ovinc_client.trace",
+    "apps.bk_crypto",
     "apps.cel",
+    "apps.doc",
     "apps.home",
 ]
 
@@ -189,3 +192,9 @@ RUM_HOST = os.getenv("RUM_HOST", "https://rumt-zh.com")
 
 # OVINC
 OVINC_API_DOMAIN = getenv_or_raise("OVINC_API_DOMAIN")
+
+# Crypto
+BKCRYPTO = {
+    "SYMMETRIC_CIPHER_TYPE": SymmetricCipherType.SM4.value,
+    "SYMMETRIC_CIPHERS": {"default": {"common": {"key": APP_SECRET}}},
+}
