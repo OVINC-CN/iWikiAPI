@@ -1,3 +1,4 @@
+from ovinc_client.core.auth import SessionAuthenticate
 from ovinc_client.core.viewsets import ListMixin, MainViewSet
 from rest_framework.decorators import action
 from rest_framework.request import Request
@@ -13,6 +14,7 @@ class TagViewSet(ListMixin, MainViewSet):
     """
 
     queryset = Tag.objects.all()
+    authentication_classes = [SessionAuthenticate]
 
     def list(self, request: Request, *args, **kwargs):
         """

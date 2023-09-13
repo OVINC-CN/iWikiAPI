@@ -34,7 +34,7 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
     permission_classes = [DocOwnerPermission]
 
     def get_authenticators(self):
-        if self.request.path in ["/doc/"]:
+        if self.action_map[self.request.method.lower()] in ["list", "retrieve"]:
             return [SessionAuthenticate()]
         return super().get_authenticators()
 
@@ -100,7 +100,7 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
             is_public=request_data["is_public"],
             owner=request.user,
             updated_at=datetime.datetime.now(),
-            created_at=request_data["created_at"],
+            created_at=request_data.get("created_at", datetime.datetime.now()),
         )
 
         # Create Doc Tag Relation
@@ -128,6 +128,7 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
         # Update Doc
         for key, val in request_data.items():
             setattr(inst, key, val)
-        inst.save(update_fields=request_data.keys())
+        inst.updated_at = datetime.datetime.now()
+        inst.save(update_fields=[*request_data.keys(), "updated_at"])
 
         return Response({"id": inst.id})

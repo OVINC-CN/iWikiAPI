@@ -49,7 +49,7 @@ class EditDocSerializer(serializers.ModelSerializer):
     header_img = serializers.URLField(label=gettext_lazy("Header Image"))
     is_public = serializers.BooleanField(label=gettext_lazy("Is Public"))
     tags = serializers.ListField(label=gettext_lazy("Tags"), child=serializers.CharField(max_length=SHORT_CHAR_LENGTH))
-    created_at = serializers.DateTimeField(label=gettext_lazy("Created Time"), default=datetime.datetime.now)
+    created_at = serializers.DateTimeField(label=gettext_lazy("Created Time"), required=False)
 
     class Meta:
         model = Doc
