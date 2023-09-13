@@ -59,7 +59,7 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
         # Tags Filter
         tags = request_data.get("tags", [])
         if tags:
-            tags = Tag.objects.filter(id__in=tags)
+            tags = Tag.objects.filter(name__in=tags)
             doc_tag = DocTag.objects.filter(tag__in=tags)
             queryset = queryset.filter(id__in=doc_tag.values("doc"))
 
