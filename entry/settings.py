@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+from bkcrypto.constants import SymmetricCipherType
 from environ import environ
 from ovinc_client.core.logger import get_logging_config_dict
 from ovinc_client.core.utils import getenv_or_raise, strtobool
@@ -40,7 +41,10 @@ INSTALLED_APPS = [
     "sslserver",
     "ovinc_client.account",
     "ovinc_client.trace",
+    "apps.bk_crypto",
     "apps.cel",
+    "apps.cos",
+    "apps.doc",
     "apps.home",
 ]
 
@@ -189,3 +193,17 @@ RUM_HOST = os.getenv("RUM_HOST", "https://rumt-zh.com")
 
 # OVINC
 OVINC_API_DOMAIN = getenv_or_raise("OVINC_API_DOMAIN")
+
+# Crypto
+BKCRYPTO = {
+    "SYMMETRIC_CIPHER_TYPE": SymmetricCipherType.SM4.value,
+    "SYMMETRIC_CIPHERS": {"default": {"common": {"key": APP_SECRET}}},
+}
+
+# QCLOUD
+QCLOUD_SECRET_ID = os.getenv("QCLOUD_SECRET_ID")
+QCLOUD_SECRET_KEY = os.getenv("QCLOUD_SECRET_KEY")
+QCLOUD_COS_REGION = os.getenv("QCLOUD_COS_REGION", "ap-beijing")
+QCLOUD_COS_BUCKET = os.getenv("QCLOUD_COS_BUCKET")
+QCLOUD_COS_UPLOAD_MAX_SIZE = int(os.getenv("QCLOUD_COS_UPLOAD_MAX_SIZE", 1024 * 1024 * 200))  # 200M
+QCLOUD_COS_URL = os.getenv("QCLOUD_COS_URL")
