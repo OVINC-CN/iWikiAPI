@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.global_settings import LANGUAGE_COOKIE_NAME
 from django.contrib.auth import get_user_model
 from ovinc_client.account.models import User
+from ovinc_client.account.serializers import UserInfoSerializer
 from ovinc_client.core.auth import SessionAuthenticate
 from ovinc_client.core.viewsets import MainViewSet
 from rest_framework.response import Response
@@ -21,7 +22,7 @@ class HomeView(MainViewSet):
 
     def list(self, request, *args, **kwargs):
         msg = f"[{request.method}] Connect Success"
-        return Response({"resp": msg, "user": request.user.username})
+        return Response({"resp": msg, "user": UserInfoSerializer(instance=request.user).data})
 
 
 class I18nViewSet(MainViewSet):

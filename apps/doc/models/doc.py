@@ -3,6 +3,7 @@ from typing import List
 
 from bkcrypto.contrib.django.fields import SymmetricTextField
 from django.db import models, transaction
+from django.db.models import F
 from django.utils.translation import gettext_lazy
 from ovinc_client.core.models import BaseModel, ForeignKey, UniqIDField
 
@@ -55,6 +56,10 @@ class Doc(DocBase):
         tags = Tag.objects.filter(name__in=tags)
         DocTag.objects.bulk_create([DocTag(tag=tag, doc=self) for tag in tags], ignore_conflicts=True)
         DocTag.objects.filter(doc=self).exclude(tag__in=tags).delete()
+
+    @transaction.atomic()
+    def record_read(self):
+        self.__class__.objects.select_for_update().filter(id=self.id).update(pv=F("pv") + 1)
 
 
 class DocBin(DocBase):

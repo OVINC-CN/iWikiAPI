@@ -1,3 +1,4 @@
+import datetime
 from typing import List
 
 from django.utils.translation import gettext_lazy
@@ -24,7 +25,9 @@ class DocListSerializer(serializers.ModelSerializer):
         exclude = ["content"]
 
     def get_tags(self, instance: Doc) -> List[dict]:
-        return [TagInfoSerializer(instance=dt.tag).data["name"] for dt in instance.doctag_set.all()]
+        tags = [TagInfoSerializer(instance=dt.tag).data["name"] for dt in instance.doctag_set.all()]
+        tags.sort()
+        return tags
 
 
 class DocInfoSerializer(DocListSerializer):
@@ -46,7 +49,28 @@ class EditDocSerializer(serializers.ModelSerializer):
     header_img = serializers.URLField(label=gettext_lazy("Header Image"))
     is_public = serializers.BooleanField(label=gettext_lazy("Is Public"))
     tags = serializers.ListField(label=gettext_lazy("Tags"), child=serializers.CharField(max_length=SHORT_CHAR_LENGTH))
+    created_at = serializers.DateTimeField(label=gettext_lazy("Created Time"), default=datetime.datetime.now)
 
     class Meta:
         model = Doc
-        fields = ["title", "content", "header_img", "is_public", "tags"]
+        fields = ["title", "content", "header_img", "is_public", "tags", "created_at"]
+
+
+class DocSearchSerializer(serializers.Serializer):
+    """
+    Search Doc
+    """
+
+    tags = serializers.ListField(
+        label=gettext_lazy("Tags"),
+        required=False,
+        allow_null=True,
+        allow_empty=True,
+        child=serializers.CharField(max_length=SHORT_CHAR_LENGTH),
+    )
+
+    def to_internal_value(self, data):
+        data = data.dict()
+        if "tags" in data:
+            data["tags"] = [t for t in data["tags"].split(",") if t]
+        return super().to_internal_value(data)
