@@ -16,6 +16,8 @@ docker build . -t <IMAGE_NAME>
 # UWSGI 配置，PROCESSES 一般为 CPU 核心数，THREADS 可以为 5 * CPU
 UWSGI_PROCESSES=2
 UWSGI_THREADS=10
+# Celery Worker
+WORKER_COUNT=2
 # 是否开启 DEBUG 模式，生产环境部署请关闭
 DEBUG=False
 # 日志等级
