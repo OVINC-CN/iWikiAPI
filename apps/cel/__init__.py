@@ -18,4 +18,9 @@ app.conf.beat_schedule = {
         "schedule": crontab(minute="*"),
         "args": (),
     },
+    "remove_unused_tags": {
+        "task": "apps.cel.tasks.doc.remove_unused_tags",
+        "schedule": crontab(minute="*"),
+        "args": (),
+    },
 }
