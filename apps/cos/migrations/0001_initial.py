@@ -1,3 +1,5 @@
+# pylint: disable=C0103,R0801
+
 import django.db.models.deletion
 import ovinc_client.core.models
 import ovinc_client.core.utils

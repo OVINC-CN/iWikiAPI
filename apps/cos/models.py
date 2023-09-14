@@ -26,8 +26,4 @@ class COSLog(BaseModel):
 
     @classmethod
     def build_key(cls, filename: str) -> str:
-        return "upload/{date_path}/{random}/{filename}".format(
-            date_path=datetime.datetime.now().strftime("%Y%m/%d"),
-            random=uniq_id_without_time().upper()[:10],
-            filename=filename,
-        )
+        return f"upload/{datetime.datetime.now().strftime('%Y%m/%d')}/{uniq_id_without_time().upper()[:10]}/{filename}"

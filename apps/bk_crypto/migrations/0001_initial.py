@@ -1,3 +1,5 @@
+# pylint: disable=C0103
+
 import ovinc_client.core.models
 import ovinc_client.core.utils
 from django.db import migrations, models
