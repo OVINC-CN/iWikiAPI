@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-13 11:24+0800\n"
+"POT-Creation-Date: 2023-09-14 15:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,130 +18,116 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: apps/account/apps.py:8
-msgid "User Account"
-msgstr "用户账户"
+msgid "BK Crypto"
+msgstr "BK 加密"
 
-#: apps/account/constants.py:21
-msgid "Personal"
-msgstr "个人"
+msgid "Private Key"
+msgstr "私钥"
 
-#: apps/account/constants.py:22
-msgid "Platform"
-msgstr "平台"
+msgid "ID"
+msgstr "ID"
 
-#: apps/account/constants.py:30
-msgid "Avatar"
-msgstr "头像"
+msgid "Config Key"
+msgstr "配置键"
 
-#: apps/account/constants.py:31
-msgid "Phone Number"
-msgstr "联系电话"
+msgid "Config Value"
+msgstr "配置值"
 
-#: apps/account/constants.py:32
-msgid "Mail Address"
-msgstr "邮件地址"
+msgid "Crypto Config"
+msgstr "加密配置"
 
-#: apps/account/models.py:22
-msgid "Username Cannot be Empty"
-msgstr "用户名不能为空"
+msgid "Is Success"
+msgstr "是否成功"
 
-#: apps/account/models.py:39
-msgid "username"
-msgstr "用户名"
+msgid "Full Path"
+msgstr "完整路径"
 
-#: apps/account/models.py:43
-msgid "already in use"
-msgstr "已被占用"
+msgid "COS"
+msgstr "对象存储 COS"
 
-#: apps/account/models.py:45
-msgid "Nick Name"
-msgstr "用户昵称"
+msgid "Upload Failed"
+msgstr "上传失败"
 
-#: apps/account/models.py:47
-msgid "User Type"
-msgstr "用户类型"
+msgid "File Name"
+msgstr "文件名"
 
-#: apps/account/models.py:52
-msgid "Date Joined"
-msgstr "注册时间"
+msgid "File Path"
+msgstr "文件路径"
 
-#: apps/account/models.py:59
-msgid "User"
-msgstr "用户"
+msgid "Response"
+msgstr "响应"
 
-#: apps/home/apps.py:8
+msgid "Owner"
+msgstr "拥有者"
+
+msgid "Uploaded Time"
+msgstr "上传时间"
+
+msgid "COS Log"
+msgstr "对象存储日志"
+
+msgid "File Size Too Large"
+msgstr "文件过大"
+
+msgid "Tags"
+msgstr "标签"
+
+msgid "Title"
+msgstr "标题"
+
+msgid "Name"
+msgstr "名称"
+
+msgid "Doc"
+msgstr "文章"
+
+msgid "Content"
+msgstr "内容"
+
+msgid "Updated Time"
+msgstr "更新时间"
+
+msgid "Created Time"
+msgstr "创建时间"
+
+msgid "Comment"
+msgstr "评论"
+
+msgid "Deleted Time"
+msgstr "删除时间"
+
+msgid "Comment Bin"
+msgstr "评论回收站"
+
+msgid "Header Image"
+msgstr "头图"
+
+msgid "Is Public"
+msgstr "是否公开"
+
+msgid "PV"
+msgstr "访问数量"
+
+msgid "Doc Bin"
+msgstr "文章回收站"
+
+msgid "Tag"
+msgstr "标签"
+
+msgid "Doc Tag"
+msgstr "文章标签"
+
+msgid "Owner Nick Name"
+msgstr "拥有者昵称"
+
+msgid "Comment Count"
+msgstr "评论数量"
+
 msgid "Home Module"
-msgstr "首页"
+msgstr "主模块"
 
-#: apps/home/exceptions.py:8
 msgid "Language Code Invalid"
 msgstr "语言ID非法"
 
-#: apps/home/serializers.py:12
 msgid "Language Code"
 msgstr "语言ID"
-
-#: apps/trace/apps.py:11
-msgid "App Performance"
-msgstr "应用性能"
-
-#: core/constants.py:30
-msgid "LIST"
-msgstr "LIST"
-
-#: core/constants.py:31
-msgid "CREATE"
-msgstr "CREATE"
-
-#: core/constants.py:32
-msgid "UPDATE"
-msgstr "UPDATE"
-
-#: core/constants.py:33
-msgid "PARTIAL_UPDATE"
-msgstr "PARTIAL_UPDATE"
-
-#: core/constants.py:34
-msgid "DESTROY"
-msgstr "DESTROY"
-
-#: core/exceptions.py:54
-msgid "Request Failed"
-msgstr "请求失败"
-
-#: core/exceptions.py:118
-msgid "Server Error"
-msgstr "服务错误"
-
-#: core/exceptions.py:123
-msgid "Login Required"
-msgstr "未登录"
-
-#: core/exceptions.py:128
-msgid "Login Failed"
-msgstr "登录失败"
-
-#: core/exceptions.py:133
-msgid "Permission Denied"
-msgstr "未经授权访问"
-
-#: core/exceptions.py:138
-msgid "Operate Error"
-msgstr "异常操作"
-
-#: core/exceptions.py:143
-msgid "Resource Not Found"
-msgstr "资源未找到"
-
-#: core/exceptions.py:148
-msgid "Service Closed"
-msgstr "服务维护中"
-
-#: core/models.py:192
-msgid "Soft Delete"
-msgstr "软删除"
-
-#: core/paginations.py:19
-msgid "Invalid Page Number"
-msgstr "页码有误"
