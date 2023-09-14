@@ -20,7 +20,7 @@ app.conf.beat_schedule = {
     },
     "remove_unused_tags": {
         "task": "apps.cel.tasks.doc.remove_unused_tags",
-        "schedule": crontab(minute="*"),
+        "schedule": crontab(minute="0", hour="2"),
         "args": (),
     },
 }
