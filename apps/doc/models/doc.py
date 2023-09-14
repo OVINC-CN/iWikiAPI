@@ -1,3 +1,5 @@
+# pylint: disable=R0801
+
 import datetime
 from typing import List
 
@@ -29,7 +31,7 @@ class DocBase(BaseModel):
         abstract = True
 
     def __str__(self) -> str:
-        return "{} ({})".format(self.title, self.id)
+        return f"{self.title} ({self.id})"
 
 
 class Doc(DocBase):
@@ -45,7 +47,7 @@ class Doc(DocBase):
     @transaction.atomic()
     def delete(self, *args, **kwargs) -> None:
         doc_bin = DocBin()
-        for field in self._meta.fields:
+        for field in self._meta.fields:  # pylint: disable=E1101
             setattr(doc_bin, field.name, getattr(self, field.name))
         doc_bin.deleted_at = datetime.datetime.now()
         doc_bin.save()

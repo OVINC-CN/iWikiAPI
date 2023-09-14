@@ -43,7 +43,7 @@ class Client:
         except Exception as err:
             cos_log.resp = getattr(err, "_digest_msg", {})
             cos_log.save(update_fields=["resp"])
-            raise UploadFailed(detail=cos_log.resp.get("message"))
+            raise UploadFailed(detail=cos_log.resp.get("message")) from err
         # Update Log
         cos_log.resp = resp
         cos_log.save(update_fields=["resp"])

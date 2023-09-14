@@ -1,3 +1,5 @@
+# pylint: disable=C0103
+
 from django.db import migrations
 
 from apps.bk_crypto.ciphers import asymmetric_cipher, symmetric_cipher

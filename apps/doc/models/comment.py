@@ -1,3 +1,5 @@
+# pylint: disable=R0801
+
 import datetime
 
 from bkcrypto.contrib.django.fields import SymmetricTextField
@@ -35,7 +37,7 @@ class Comment(CommentBase):
     @transaction.atomic()
     def delete(self, *args, **kwargs) -> None:
         comment_bin = CommentBin()
-        for field in self._meta.fields:
+        for field in self._meta.fields:  # pylint: disable=E1101
             setattr(comment_bin, field.name, getattr(self, field.name))
         comment_bin.deleted_at = datetime.datetime.now()
         comment_bin.save()
