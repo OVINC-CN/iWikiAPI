@@ -3,7 +3,7 @@ django>=4
 djangorestframework>=3
 
 # ovinc
-ovinc-client==0.1.6
+ovinc-client==0.1.7
 bk-crypto-python-sdk==1.1.1
 
 # Celery
