@@ -1,6 +1,7 @@
 from rest_framework.permissions import BasePermission
-from apps.permission.models import UserPermission
+
 from apps.permission.constants import PermissionItem
+from apps.permission.models import UserPermission
 
 
 class UploadFilePermission(BasePermission):
