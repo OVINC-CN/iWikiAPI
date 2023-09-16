@@ -5,6 +5,7 @@ from rest_framework.response import Response
 
 from apps.cos.client import Client
 from apps.cos.models import COSLog
+from apps.cos.permissions import UploadFilePermission
 from apps.cos.serializers import UploadFileSerializer
 
 
@@ -14,6 +15,7 @@ class COSViewSet(CreateMixin, MainViewSet):
     """
 
     queryset = COSLog.objects.all()
+    permission_classes = [UploadFilePermission]
 
     @action(methods=["POST"], detail=False)
     def upload(self, request: Request, *args, **kwargs):

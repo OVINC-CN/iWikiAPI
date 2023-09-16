@@ -16,7 +16,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from apps.doc.models import Doc, DocTag, Tag
-from apps.doc.permissions import DocOwnerPermission
+from apps.doc.permissions import CreateDocPermission, DocOwnerPermission
 from apps.doc.serializers import (
     DocInfoSerializer,
     DocListSerializer,
@@ -37,6 +37,12 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
         if self.action_map[self.request.method.lower()] in ["list", "retrieve"]:
             return [SessionAuthenticate()]
         return super().get_authenticators()
+
+    def get_permissions(self):
+        permissions = super().get_permissions()
+        if self.action in ["create"]:
+            permissions.append(CreateDocPermission())
+        return permissions
 
     def list(self, request: Request, *args, **kwargs):
         """
