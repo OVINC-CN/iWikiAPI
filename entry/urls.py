@@ -12,6 +12,7 @@ urlpatterns = [
     path("", include("ovinc_client.trace.urls")),
     path("", include("apps.doc.urls")),
     path("", include("apps.cos.urls")),
+    path("", include("apps.permission.urls")),
 ]
 
 handler400 = exceptions.bad_request

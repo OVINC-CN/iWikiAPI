@@ -3,6 +3,8 @@ from rest_framework.request import Request
 from rest_framework.viewsets import GenericViewSet
 
 from apps.doc.models import Doc
+from apps.permission.constants import PermissionItem
+from apps.permission.models import UserPermission
 
 
 class DocOwnerPermission(BasePermission):
@@ -19,3 +21,12 @@ class DocOwnerPermission(BasePermission):
             return True
         # Check Owner
         return obj.owner == request.user
+
+
+class CreateDocPermission(BasePermission):
+    """
+    Create Doc Permission
+    """
+
+    def has_permission(self, request, view):
+        return UserPermission.check_permission(user=request.user, permission_item=PermissionItem.CREATE_DOC)

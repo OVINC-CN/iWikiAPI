@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "apps.cos",
     "apps.doc",
     "apps.home",
+    "apps.permission",
 ]
 
 # MIDDLEWARE
