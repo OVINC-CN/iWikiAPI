@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-14 15:45+0800\n"
+"POT-Creation-Date: 2023-09-17 18:38+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,8 +45,8 @@ msgstr "完整路径"
 msgid "COS"
 msgstr "对象存储 COS"
 
-msgid "Upload Failed"
-msgstr "上传失败"
+msgid "Temp Key Generate Failed"
+msgstr "鉴权失败"
 
 msgid "File Name"
 msgstr "文件名"
@@ -66,8 +66,8 @@ msgstr "上传时间"
 msgid "COS Log"
 msgstr "对象存储日志"
 
-msgid "File Size Too Large"
-msgstr "文件过大"
+msgid "File Name Invalid"
+msgstr "文件名异常"
 
 msgid "Tags"
 msgstr "标签"
@@ -131,3 +131,30 @@ msgstr "语言ID非法"
 
 msgid "Language Code"
 msgstr "语言ID"
+
+msgid "Nick Name"
+msgstr "昵称"
+
+msgid "Permission"
+msgstr "权限"
+
+msgid "Create Doc"
+msgstr "创建文章"
+
+msgid "Upload File"
+msgstr "上传文件"
+
+msgid "User"
+msgstr "用户"
+
+msgid "Permission Item"
+msgstr "权限实例"
+
+msgid "Expired Time"
+msgstr "过期时间"
+
+msgid "Authorized Time"
+msgstr "授权时间"
+
+msgid "User Permission"
+msgstr "用户权限"
