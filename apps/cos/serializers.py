@@ -10,6 +10,6 @@ class GenerateTempSecretSerializer(serializers.Serializer):
     filename = serializers.CharField(label=gettext_lazy("File Name"))
 
     def validate_filename(self, filename: str) -> str:
-        if filename.endswith("/"):
+        if filename.find("/") != -1:
             raise serializers.ValidationError(gettext("File Name Invalid"))
         return filename
