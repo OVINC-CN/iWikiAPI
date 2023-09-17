@@ -1,4 +1,5 @@
 import datetime
+from dataclasses import dataclass
 
 from django.db import models
 from django.utils.translation import gettext_lazy
@@ -27,3 +28,20 @@ class COSLog(BaseModel):
     @classmethod
     def build_key(cls, filename: str) -> str:
         return f"upload/{datetime.datetime.now().strftime('%Y%m/%d')}/{uniq_id_without_time().upper()[:10]}/{filename}"
+
+
+@dataclass
+class COSCredential:
+    """
+    COS Credential
+    """
+
+    cos_url: str
+    cos_bucket: str
+    cos_region: str
+    key: str
+    secret_id: str
+    secret_key: str
+    token: str
+    start_time: int
+    expired_time: int

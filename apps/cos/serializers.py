@@ -1,17 +1,15 @@
-from django.conf import settings
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.utils.translation import gettext
+from django.utils.translation import gettext, gettext_lazy
 from rest_framework import serializers
 
 
-class UploadFileSerializer(serializers.Serializer):
+class GenerateTempSecretSerializer(serializers.Serializer):
     """
-    File
+    Temp Secret
     """
 
-    file = serializers.FileField()
+    filename = serializers.CharField(label=gettext_lazy("File Name"))
 
-    def validate_file(self, file: InMemoryUploadedFile) -> InMemoryUploadedFile:
-        if file.size > settings.QCLOUD_COS_UPLOAD_MAX_SIZE:
-            raise serializers.ValidationError(gettext("File Size Too Large"))
-        return file
+    def validate_filename(self, filename: str) -> str:
+        if filename.endswith("/"):
+            raise serializers.ValidationError(gettext("File Name Invalid"))
+        return filename
