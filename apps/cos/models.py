@@ -30,6 +30,7 @@ class COSLog(BaseModel):
         return f"upload/{datetime.datetime.now().strftime('%Y%m/%d')}/{uniq_id_without_time().upper()[:10]}/{filename}"
 
 
+# pylint: disable=R0902
 @dataclass
 class COSCredential:
     """
