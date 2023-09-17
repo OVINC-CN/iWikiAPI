@@ -11,7 +11,7 @@ class COSLogAdmin(admin.ModelAdmin):
 
     @admin.display(description=gettext_lazy("Is Success"), boolean=True)
     def is_success(self, log: COSLog) -> bool:
-        return isinstance(log.resp, dict) and "ETag" in log.resp
+        return isinstance(log.resp, dict) and ("credentials" in log.resp or "ETag" in log.resp)
 
     @admin.display(description=gettext_lazy("Full Path"))
     def full_path(self, log: COSLog) -> str:

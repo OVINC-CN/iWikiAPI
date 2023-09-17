@@ -1,53 +1,58 @@
-from urllib.parse import quote
+import traceback
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import IntegrityError
 from ovinc_client.account.models import User
-from qcloud_cos import CosConfig, CosS3Client
+from ovinc_client.core.logger import logger
+from sts.sts import Sts
 
-from apps.cos.exceptions import UploadFailed
-from apps.cos.models import COSLog
+from apps.cos.exceptions import TempKeyGenerateFailed
+from apps.cos.models import COSCredential, COSLog
 
 USER_MODEL: User = get_user_model()
 
 
-class Client:
+class STSClient:
     """
-    COS Client
+    STS Client
     """
 
-    def __init__(self, user: USER_MODEL):
-        self.user = user
-        self.config = CosConfig(
-            Region=settings.QCLOUD_COS_REGION, SecretId=settings.QCLOUD_SECRET_ID, SecretKey=settings.QCLOUD_SECRET_KEY
-        )
-        self.client = CosS3Client(self.config)
-
-    def upload(self, file: InMemoryUploadedFile) -> str:
-        # Record Log
+    @classmethod
+    def generate_cos_upload_credential(cls, user: USER_MODEL, filename: str) -> COSCredential:
         try:
-            cos_log = COSLog.objects.create(
-                filename=file.name, key=COSLog.build_key(file.name), resp={}, owner=self.user
-            )
+            cos_log = COSLog.objects.create(filename=filename, key=COSLog.build_key(filename), resp={}, owner=user)
         except IntegrityError:
-            return self.upload(file)
-        # Upload
+            return cls.generate_cos_upload_credential(user=user, filename=filename)
+        config = {
+            "url": settings.QCLOUD_API_URL_TMPL.format("sts"),
+            "duration_seconds": settings.QCLOUD_STS_EXPIRE_TIME,
+            "secret_id": settings.QCLOUD_SECRET_ID,
+            "secret_key": settings.QCLOUD_SECRET_KEY,
+            "bucket": settings.QCLOUD_COS_BUCKET,
+            "region": settings.QCLOUD_COS_REGION,
+            "allow_prefix": [cos_log.key],
+            "allow_actions": ["name/cos:PutObject"],
+        }
+        response = {}
         try:
-            resp = self.client.put_object(
-                Bucket=settings.QCLOUD_COS_BUCKET,
-                Body=file,
-                Key=cos_log.key,
+            sts = Sts(config)
+            response = sts.get_credential()
+            return COSCredential(
+                cos_url=settings.QCLOUD_COS_URL,
+                cos_bucket=settings.QCLOUD_COS_BUCKET,
+                cos_region=settings.QCLOUD_COS_REGION,
+                key=cos_log.key,
+                secret_id=response["credentials"]["tmpSecretId"],
+                secret_key=response["credentials"]["tmpSecretKey"],
+                token=response["credentials"]["sessionToken"],
+                start_time=response["startTime"],
+                expired_time=response["expiredTime"],
             )
         except Exception as err:
-            cos_log.resp = getattr(err, "_digest_msg", {})
+            logger.exception("[TempKeyGenerateFailed] %s", err)
+            response = {"err": str(err), "traceback": traceback.format_exc()}
+            raise TempKeyGenerateFailed() from err
+        finally:
+            cos_log.resp = response
             cos_log.save(update_fields=["resp"])
-            raise UploadFailed(detail=cos_log.resp.get("message")) from err
-        # Update Log
-        cos_log.resp = resp
-        cos_log.save(update_fields=["resp"])
-        # Check Success
-        if "ETag" in resp:
-            return f"{settings.QCLOUD_COS_URL}/{quote(cos_log.key)}"
-        raise UploadFailed()
