@@ -25,7 +25,8 @@ class STSClient:
         except IntegrityError:
             return cls.generate_cos_upload_credential(user=user, filename=filename)
         config = {
-            "url": settings.QCLOUD_API_URL_TMPL.format("sts"),
+            "domain": settings.QCLOUD_API_DOMAIN_TMPL.format("sts"),
+            "url": f"{settings.QCLOUD_API_SCHEME}://{settings.QCLOUD_API_DOMAIN_TMPL.format('sts')}",
             "duration_seconds": settings.QCLOUD_STS_EXPIRE_TIME,
             "secret_id": settings.QCLOUD_SECRET_ID,
             "secret_key": settings.QCLOUD_SECRET_KEY,
