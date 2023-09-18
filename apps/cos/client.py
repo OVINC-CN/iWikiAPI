@@ -24,9 +24,10 @@ class STSClient:
             cos_log = COSLog.objects.create(filename=filename, key=COSLog.build_key(filename), resp={}, owner=user)
         except IntegrityError:
             return cls.generate_cos_upload_credential(user=user, filename=filename)
+        tencent_cloud_api_domain = settings.QCLOUD_API_DOMAIN_TMPL.format("sts")
         config = {
-            "domain": settings.QCLOUD_API_DOMAIN_TMPL.format("sts"),
-            "url": f"{settings.QCLOUD_API_SCHEME}://{settings.QCLOUD_API_DOMAIN_TMPL.format('sts')}",
+            "domain": tencent_cloud_api_domain,
+            "url": f"{settings.QCLOUD_API_SCHEME}://{tencent_cloud_api_domain}",
             "duration_seconds": settings.QCLOUD_STS_EXPIRE_TIME,
             "secret_id": settings.QCLOUD_SECRET_ID,
             "secret_key": settings.QCLOUD_SECRET_KEY,
