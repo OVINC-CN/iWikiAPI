@@ -44,7 +44,7 @@ class SymmetricTextField(_SymmetricTextField):
             return super().get_decrypted_value(value)
         return value
 
-    def encrypt(self, value):
+    def encrypt(self, plaintext: str) -> str:
         if settings.ENABLE_BKCRYPTO:
-            return super().encrypt(value)
-        return value
+            return super().encrypt(plaintext)
+        return plaintext

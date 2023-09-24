@@ -21,8 +21,8 @@ class DataEncryptHelper:
             self.method = self.field.get_decrypted_value
 
     def trans(self) -> None:
-        [self.trans_doc(d) for d in [*Doc.objects.all(), *DocBin.objects.all()]]
-        [self.trans_comment(c) for c in [*Comment.objects.all(), *CommentBin.objects.all()]]
+        [self.trans_doc(d) for d in [*Doc.objects.all(), *DocBin.objects.all()]]  # pylint: disable=W0106
+        [self.trans_comment(c) for c in [*Comment.objects.all(), *CommentBin.objects.all()]]  # pylint: disable=W0106
 
     def trans_doc(self, doc: Union[Doc, DocBin]) -> None:
         doc.title = self.method(doc.title)
