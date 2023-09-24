@@ -1,8 +1,7 @@
 # pylint: disable=R0801
 
-import datetime
-
 from django.db import models, transaction
+from django.utils import timezone
 from django.utils.translation import gettext_lazy
 from ovinc_client.core.models import BaseModel, ForeignKey, UniqIDField
 
@@ -40,7 +39,7 @@ class Comment(CommentBase):
         comment_bin = CommentBin()
         for field in self._meta.fields:  # pylint: disable=E1101
             setattr(comment_bin, field.name, getattr(self, field.name))
-        comment_bin.deleted_at = datetime.datetime.now()
+        comment_bin.deleted_at = timezone.now()
         comment_bin.save()
         return super().delete(*args, **kwargs)
 

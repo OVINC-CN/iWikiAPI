@@ -1,7 +1,7 @@
-import datetime
 from dataclasses import dataclass
 
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy
 from ovinc_client.core.constants import MAX_CHAR_LENGTH
 from ovinc_client.core.models import BaseModel, ForeignKey, UniqIDField
@@ -27,7 +27,11 @@ class COSLog(BaseModel):
 
     @classmethod
     def build_key(cls, filename: str) -> str:
-        return f"upload/{datetime.datetime.now().strftime('%Y%m/%d')}/{uniq_id_without_time().upper()[:10]}/{filename}"
+        return (
+            f"upload/"
+            f"{timezone.now().astimezone(timezone.get_default_timezone()).strftime('%Y%m/%d')}/"
+            f"{uniq_id_without_time().upper()[:10]}/{filename}"
+        )
 
 
 # pylint: disable=R0902
