@@ -3,12 +3,12 @@
 import datetime
 from typing import List
 
-from bkcrypto.contrib.django.fields import SymmetricTextField
 from django.db import models, transaction
 from django.db.models import F
 from django.utils.translation import gettext_lazy
 from ovinc_client.core.models import BaseModel, ForeignKey, UniqIDField
 
+from apps.bk_crypto.models import SymmetricTextField
 from apps.doc.models.tag import DocTag, Tag
 
 

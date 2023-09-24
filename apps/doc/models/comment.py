@@ -2,10 +2,11 @@
 
 import datetime
 
-from bkcrypto.contrib.django.fields import SymmetricTextField
 from django.db import models, transaction
 from django.utils.translation import gettext_lazy
 from ovinc_client.core.models import BaseModel, ForeignKey, UniqIDField
+
+from apps.bk_crypto.models import SymmetricTextField
 
 
 class CommentBase(BaseModel):

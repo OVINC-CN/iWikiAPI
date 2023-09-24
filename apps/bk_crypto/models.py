@@ -1,3 +1,5 @@
+from bkcrypto.contrib.django.fields import SymmetricTextField as _SymmetricTextField
+from django.conf import settings
 from django.db import ProgrammingError, models
 from django.utils.translation import gettext_lazy
 from ovinc_client.core.constants import MAX_CHAR_LENGTH
@@ -34,3 +36,15 @@ class CryptoConfig(BaseModel):
         config.value = value
         config.save()
         return is_create, config
+
+
+class SymmetricTextField(_SymmetricTextField):
+    def get_decrypted_value(self, value):
+        if settings.ENABLE_BKCRYPTO:
+            return super().get_decrypted_value(value)
+        return value
+
+    def encrypt(self, value):
+        if settings.ENABLE_BKCRYPTO:
+            return super().encrypt(value)
+        return value

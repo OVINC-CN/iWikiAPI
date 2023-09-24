@@ -195,7 +195,8 @@ RUM_HOST = os.getenv("RUM_HOST", "https://rumt-zh.com")
 # OVINC
 OVINC_API_DOMAIN = getenv_or_raise("OVINC_API_DOMAIN")
 
-# Crypto
+# Crypto (using encryption may significantly impact server performance)
+ENABLE_BKCRYPTO = strtobool(os.getenv("ENABLE_BKCRYPTO", "False"))
 BKCRYPTO = {
     "SYMMETRIC_CIPHER_TYPE": SymmetricCipherType.SM4.value,
     "SYMMETRIC_CIPHERS": {"default": {"common": {"key": APP_SECRET}}},
