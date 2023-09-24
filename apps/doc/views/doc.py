@@ -1,7 +1,6 @@
-import datetime
-
 from django.db import transaction
 from django.db.models import Q
+from django.utils import timezone
 from ovinc_client.core.auth import SessionAuthenticate
 from ovinc_client.core.paginations import NumPagination
 from ovinc_client.core.viewsets import (
@@ -105,8 +104,8 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
             header_img=request_data["header_img"],
             is_public=request_data["is_public"],
             owner=request.user,
-            updated_at=datetime.datetime.now(),
-            created_at=request_data.get("created_at", datetime.datetime.now()),
+            updated_at=timezone.now(),
+            created_at=request_data.get("created_at", timezone.now()),
         )
 
         # Create Doc Tag Relation
@@ -134,7 +133,7 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
         # Update Doc
         for key, val in request_data.items():
             setattr(inst, key, val)
-        inst.updated_at = datetime.datetime.now()
+        inst.updated_at = timezone.now()
         inst.save(update_fields=[*request_data.keys(), "updated_at"])
 
         return Response({"id": inst.id})

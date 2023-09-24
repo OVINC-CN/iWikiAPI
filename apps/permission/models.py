@@ -1,7 +1,6 @@
-import datetime
-
 from django.db import models
 from django.db.models import Q, QuerySet
+from django.utils import timezone
 from django.utils.translation import gettext_lazy
 from ovinc_client.account.models import User
 from ovinc_client.core.constants import SHORT_CHAR_LENGTH
@@ -37,7 +36,7 @@ class UserPermission(BaseModel):
     def check_permission(cls, user: User, permission_item: PermissionItem) -> bool:
         return cls.objects.filter(
             Q(
-                Q(user=user, permission_item=permission_item, expired_at__gt=datetime.datetime.now())
+                Q(user=user, permission_item=permission_item, expired_at__gt=timezone.now())
                 | Q(user=user, permission_item=permission_item, expired_at__isnull=True)
             )
         ).exists()
@@ -45,5 +44,5 @@ class UserPermission(BaseModel):
     @classmethod
     def load_permissions(cls, user: User) -> QuerySet:
         return cls.objects.filter(
-            Q(Q(user=user, expired_at__gt=datetime.datetime.now()) | Q(user=user, expired_at__isnull=True))
+            Q(Q(user=user, expired_at__gt=timezone.now()) | Q(user=user, expired_at__isnull=True))
         )

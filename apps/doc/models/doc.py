@@ -1,10 +1,10 @@
 # pylint: disable=R0801
 
-import datetime
 from typing import List
 
 from django.db import models, transaction
 from django.db.models import F
+from django.utils import timezone
 from django.utils.translation import gettext_lazy
 from ovinc_client.core.models import BaseModel, ForeignKey, UniqIDField
 
@@ -49,7 +49,7 @@ class Doc(DocBase):
         doc_bin = DocBin()
         for field in self._meta.fields:  # pylint: disable=E1101
             setattr(doc_bin, field.name, getattr(self, field.name))
-        doc_bin.deleted_at = datetime.datetime.now()
+        doc_bin.deleted_at = timezone.now()
         doc_bin.save()
         return super().delete(*args, **kwargs)
 
