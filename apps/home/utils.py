@@ -24,12 +24,11 @@ class Sitemap:
         self.add_imgs()
 
     def add_root(self) -> None:
-        self.root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")
-        self.root.setAttribute("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9")
+        self.root.setAttribute("xmlns", "https://www.sitemaps.org/schemas/sitemap/0.9")
+        self.root.setAttribute("xmlns:xsi", "https://www.w3.org/2001/XMLSchema-instance")
         self.root.setAttribute(
             "xsi:schemaLocation",
-            "http://www.sitemaps.org/schemas/sitemap/0.9 \
-                    http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd",
+            "https://www.sitemaps.org/schemas/sitemap/0.9 https://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd",
         )
         self.tree.appendChild(self.root)
 
