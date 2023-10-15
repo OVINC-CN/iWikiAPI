@@ -2,12 +2,14 @@ import traceback
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import IntegrityError
 from ovinc_client.account.models import User
 from ovinc_client.core.logger import logger
+from qcloud_cos import CosConfig, CosS3Client
 from sts.sts import Sts
 
-from apps.cos.exceptions import TempKeyGenerateFailed
+from apps.cos.exceptions import TempKeyGenerateFailed, UploadFailed
 from apps.cos.models import COSCredential, COSLog
 
 USER_MODEL: User = get_user_model()
@@ -58,3 +60,27 @@ class STSClient:
         finally:
             cos_log.resp = response
             cos_log.save(update_fields=["resp"])
+
+
+class COSClient:
+    """
+    COS Client
+    """
+
+    def __init__(self, user: USER_MODEL = None):
+        self.user = user
+        self.config = CosConfig(
+            Region=settings.QCLOUD_COS_REGION, SecretId=settings.QCLOUD_SECRET_ID, SecretKey=settings.QCLOUD_SECRET_KEY
+        )
+        self.client = CosS3Client(self.config)
+
+    def upload(self, file: InMemoryUploadedFile, path: str, *args, **kwargs) -> None:
+        try:
+            resp = self.client.put_object(Bucket=settings.QCLOUD_COS_BUCKET, Body=file, Key=path, *args, **kwargs)
+        except Exception as err:
+            detail = getattr(err, "_digest_msg", {})
+            raise UploadFailed(detail=detail.get("message")) from err
+        # Check Success
+        if "ETag" in resp:
+            return
+        raise UploadFailed()

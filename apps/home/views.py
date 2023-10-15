@@ -1,13 +1,15 @@
 from django.conf import settings
 from django.conf.global_settings import LANGUAGE_COOKIE_NAME
 from django.contrib.auth import get_user_model
+from django.http import HttpResponse
 from ovinc_client.account.models import User
 from ovinc_client.account.serializers import UserInfoSerializer
 from ovinc_client.core.auth import SessionAuthenticate
-from ovinc_client.core.viewsets import MainViewSet
+from ovinc_client.core.viewsets import ListMixin, MainViewSet
 from rest_framework.response import Response
 
 from apps.home.serializers import I18nRequestSerializer
+from apps.home.utils import Sitemap
 
 USER_MODEL: User = get_user_model()
 
@@ -23,6 +25,17 @@ class HomeView(MainViewSet):
     def list(self, request, *args, **kwargs):
         msg = f"[{request.method}] Connect Success"
         return Response({"resp": msg, "user": UserInfoSerializer(instance=request.user).data})
+
+
+class SitemapView(ListMixin, MainViewSet):
+    """
+    Sitemap View
+    """
+
+    authentication_classes = [SessionAuthenticate]
+
+    def list(self, request, *args, **kwargs):
+        return HttpResponse(content=Sitemap().tree.toxml(), content_type="application/xml")
 
 
 class I18nViewSet(MainViewSet):
