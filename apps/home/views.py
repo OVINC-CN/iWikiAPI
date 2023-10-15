@@ -32,6 +32,8 @@ class SitemapView(ListMixin, MainViewSet):
     Sitemap View
     """
 
+    authentication_classes = [SessionAuthenticate]
+
     def list(self, request, *args, **kwargs):
         return HttpResponse(content=Sitemap().tree.toxml(), content_type="application/xml")
 

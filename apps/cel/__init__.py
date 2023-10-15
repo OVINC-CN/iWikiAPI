@@ -23,4 +23,9 @@ app.conf.beat_schedule = {
         "schedule": crontab(minute="0", hour="2"),
         "args": (),
     },
+    "generate_sitemap": {
+        "task": "apps.cel.tasks.home.generate_sitemap",
+        "schedule": crontab(minute="0", hour="0"),
+        "args": (),
+    },
 }
