@@ -1,11 +1,13 @@
 from dataclasses import asdict
 
+from django.conf import settings
 from ovinc_client.core.viewsets import CreateMixin, MainViewSet
 from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
 
 from apps.cos.client import STSClient
+from apps.cos.exceptions import QCloudInitUnfinished
 from apps.cos.models import COSLog
 from apps.cos.permissions import UploadFilePermission
 from apps.cos.serializers import GenerateTempSecretSerializer
@@ -24,6 +26,10 @@ class COSViewSet(CreateMixin, MainViewSet):
         """
         Generate New Temp Secret for COS
         """
+
+        # check init
+        if not settings.QCLOUD_SECRET_ID or not settings.QCLOUD_SECRET_KEY:
+            raise QCloudInitUnfinished()
 
         # validate
         serializer = GenerateTempSecretSerializer(data=request.data)
