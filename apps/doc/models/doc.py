@@ -20,7 +20,7 @@ class DocBase(BaseModel):
     id = UniqIDField(gettext_lazy("ID"), primary_key=True)
     title = SymmetricTextField(gettext_lazy("Title"))
     content = SymmetricTextField(gettext_lazy("Content"))
-    header_img = SymmetricTextField(gettext_lazy("Header Image"))
+    header_img = SymmetricTextField(gettext_lazy("Header Image"), null=True, blank=True)
     is_public = models.BooleanField(gettext_lazy("Is Public"), default=False, db_index=True)
     pv = models.BigIntegerField(gettext_lazy("PV"), default=int, db_index=True)
     owner = ForeignKey(gettext_lazy("Owner"), to="account.User", on_delete=models.CASCADE)
