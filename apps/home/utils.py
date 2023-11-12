@@ -2,6 +2,7 @@ import datetime
 import xml.dom.minidom
 
 from django.conf import settings
+from ovinc_client.core.logger import logger
 
 from apps.cos.client import COSClient
 from apps.doc.models import Doc
@@ -52,4 +53,7 @@ class Sitemap:
         self.root.appendChild(node_url)
 
     def upload_cos(self) -> None:
+        if not settings.QCLOUD_SECRET_ID or not settings.QCLOUD_SECRET_KEY:
+            logger.warning("[Sitemap] QCloud Init Unfinished")
+            return
         COSClient().upload(self.tree.toxml(), "sitemap.xml", ContentType="application/xml")
