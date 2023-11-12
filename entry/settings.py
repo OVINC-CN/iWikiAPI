@@ -60,6 +60,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "apps.home.middlewares.UserWhitelistMiddleware",
     "ovinc_client.core.middlewares.SQLDebugMiddleware",
 ]
 if DEBUG:
@@ -211,3 +212,6 @@ QCLOUD_COS_URL = os.getenv("QCLOUD_COS_URL")
 QCLOUD_API_DOMAIN_TMPL = os.getenv("QCLOUD_API_DOMAIN_TMPL", "{}.tencentcloudapi.com")
 QCLOUD_API_SCHEME = os.getenv("QCLOUD_API_SCHEME", "https")
 QCLOUD_STS_EXPIRE_TIME = int(os.getenv("QCLOUD_STS_EXPIRE_TIME", str(60 * 10)))
+
+# User Whitelist
+USER_WHITELIST = [u for u in os.getenv("USER_WHITELIST", "").split(",") if u]
