@@ -215,3 +215,7 @@ QCLOUD_STS_EXPIRE_TIME = int(os.getenv("QCLOUD_STS_EXPIRE_TIME", str(60 * 10)))
 
 # User Whitelist
 USER_WHITELIST = [u for u in os.getenv("USER_WHITELIST", "").split(",") if u]
+
+# Doc
+# One of DocSearchType
+DOC_SEARCH_TYPE = os.getenv("DOC_SEARCH_TYPE", "all")

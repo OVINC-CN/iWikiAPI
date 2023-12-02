@@ -67,9 +67,18 @@ class DocSearchSerializer(serializers.Serializer):
         allow_empty=True,
         child=serializers.CharField(max_length=SHORT_CHAR_LENGTH),
     )
+    keywords = serializers.ListField(
+        label=gettext_lazy("Keywords"),
+        required=False,
+        allow_null=True,
+        allow_empty=True,
+        child=serializers.CharField(max_length=SHORT_CHAR_LENGTH),
+    )
 
     def to_internal_value(self, data):
         data = data.dict()
         if "tags" in data:
             data["tags"] = [t for t in data["tags"].split(",") if t]
+        if "keywords" in data:
+            data["keywords"] = [k for k in data["keywords"].split(",") if k]
         return super().to_internal_value(data)
