@@ -72,6 +72,8 @@ class FeatureView(ListMixin, MainViewSet):
     Feature Toggle
     """
 
+    authentication_classes = [SessionAuthenticate]
+
     def list(self, request, *args, **kwargs):
         """
         List all features
