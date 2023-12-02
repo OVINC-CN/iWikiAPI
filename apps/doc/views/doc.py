@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import transaction
 from django.db.models import Q
 from django.utils import timezone
@@ -14,6 +15,8 @@ from ovinc_client.core.viewsets import (
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from apps.doc.constants import DocSearchType
+from apps.doc.exceptions import DocSearchTypeInvalid
 from apps.doc.models import Doc, DocTag, Tag
 from apps.doc.permissions import CreateDocPermission, DocOwnerPermission
 from apps.doc.serializers import (
@@ -43,6 +46,7 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
             permissions.append(CreateDocPermission())
         return permissions
 
+    # pylint: disable=R0914
     def list(self, request: Request, *args, **kwargs):
         """
         Doc List
@@ -67,6 +71,31 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
             tags = Tag.objects.filter(name__in=tags)
             doc_tag = DocTag.objects.filter(tag__in=tags)
             queryset = queryset.filter(id__in=doc_tag.values("doc"))
+
+        # Content Filter
+        keywords = request_data.get("keywords", [])
+        if keywords:
+            match settings.DOC_SEARCH_TYPE:
+                # Title
+                case DocSearchType.TITLE:
+                    search_keys = ["title"]
+                # Content
+                case DocSearchType.CONTENT:
+                    search_keys = ["content"]
+                # All
+                case DocSearchType.ALL:
+                    search_keys = ["title", "content"]
+                # Default
+                case _:
+                    raise DocSearchTypeInvalid()
+            # Any search key contains all keyword -> match
+            q = Q()  # pylint: disable=C0103
+            for search_key in search_keys:
+                search_filter = Q()
+                for keyword in keywords:
+                    search_filter &= Q(**{f"{search_key}__contains": keyword})
+                q |= search_filter  # pylint: disable=C0103
+            queryset = queryset.filter(q)
 
         # Page
         page = NumPagination()

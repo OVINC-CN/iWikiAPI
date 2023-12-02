@@ -65,3 +65,21 @@ class I18nViewSet(MainViewSet):
             domain=settings.SESSION_COOKIE_DOMAIN,
         )
         return response
+
+
+class FeatureView(ListMixin, MainViewSet):
+    """
+    Feature Toggle
+    """
+
+    def list(self, request, *args, **kwargs):
+        """
+        List all features
+        """
+
+        return Response(
+            data={
+                # Encrypt disabled and search type configured
+                "doc_fuzzy_search": (not settings.ENABLE_BKCRYPTO and bool(settings.DOC_SEARCH_TYPE))
+            }
+        )
