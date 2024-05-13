@@ -1,9 +1,5 @@
-#base
-django>=4
-djangorestframework>=3
-
 # ovinc
-ovinc-client==0.1.7
+ovinc-client==0.2.4
 bk-crypto-python-sdk==1.1.1
 
 # Celery
