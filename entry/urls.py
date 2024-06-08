@@ -5,6 +5,7 @@ from django.urls import include, path, re_path
 from django.views.generic import RedirectView
 from ovinc_client.core import exceptions
 
+
 # pylint: disable=W0621
 def serve_static(request, path, insecure=True, **kwargs):
     return serve(request, path, insecure=True, **kwargs)

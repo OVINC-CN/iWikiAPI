@@ -22,9 +22,9 @@ class HomeView(MainViewSet):
     queryset = USER_MODEL.get_queryset()
     authentication_classes = [SessionAuthenticate]
 
-    def list(self, request, *args, **kwargs):
+    async def list(self, request, *args, **kwargs):
         msg = f"[{request.method}] Connect Success"
-        return Response({"resp": msg, "user": UserInfoSerializer(instance=request.user).data})
+        return Response({"resp": msg, "user": await UserInfoSerializer(instance=request.user).adata})
 
 
 class SitemapView(ListMixin, MainViewSet):
@@ -34,7 +34,7 @@ class SitemapView(ListMixin, MainViewSet):
 
     authentication_classes = [SessionAuthenticate]
 
-    def list(self, request, *args, **kwargs):
+    async def list(self, request, *args, **kwargs):
         return HttpResponse(content=Sitemap().tree.toxml(), content_type="application/xml")
 
 
@@ -45,7 +45,7 @@ class I18nViewSet(MainViewSet):
 
     authentication_classes = [SessionAuthenticate]
 
-    def create(self, request, *args, **kwargs):
+    async def create(self, request, *args, **kwargs):
         """
         Change Language
         """
@@ -74,7 +74,7 @@ class FeatureView(ListMixin, MainViewSet):
 
     authentication_classes = [SessionAuthenticate]
 
-    def list(self, request, *args, **kwargs):
+    async def list(self, request, *args, **kwargs):
         """
         List all features
         """

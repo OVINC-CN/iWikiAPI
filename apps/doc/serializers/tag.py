@@ -1,9 +1,9 @@
-from rest_framework import serializers
+from adrf.serializers import ModelSerializer
 
 from apps.doc.models import Tag
 
 
-class TagInfoSerializer(serializers.ModelSerializer):
+class TagInfoSerializer(ModelSerializer):
     """
     Tag Info
     """

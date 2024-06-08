@@ -1,5 +1,6 @@
 from typing import List
 
+from adrf.serializers import ModelSerializer, Serializer
 from django.utils.translation import gettext_lazy
 from ovinc_client.core.constants import SHORT_CHAR_LENGTH
 from rest_framework import serializers
@@ -8,16 +9,21 @@ from apps.doc.models import Doc
 from apps.doc.serializers.tag import TagInfoSerializer
 
 
-class DocListSerializer(serializers.ModelSerializer):
+class DocListSerializer(ModelSerializer):
     """
     Doc List
     """
+
+    class TagsSerializerField(serializers.SerializerMethodField):
+        async def ato_representation(self, val):
+            return super().to_representation(val)
 
     owner_nick_name = serializers.CharField(
         label=gettext_lazy("Owner Nick Name"), read_only=True, source="owner.nick_name"
     )
     comments = serializers.IntegerField(label=gettext_lazy("Comment Count"), read_only=True, source="comment_set.count")
-    tags = serializers.SerializerMethodField(label=gettext_lazy("Tags"), read_only=True)
+    tags = TagsSerializerField(label=gettext_lazy("Tags"), read_only=True)
+    owner = serializers.CharField(label=gettext_lazy("Owner"), read_only=True)
 
     class Meta:
         model = Doc
@@ -39,7 +45,7 @@ class DocInfoSerializer(DocListSerializer):
         fields = "__all__"
 
 
-class EditDocSerializer(serializers.ModelSerializer):
+class EditDocSerializer(ModelSerializer):
     """
     Edit Doc
     """
@@ -55,7 +61,7 @@ class EditDocSerializer(serializers.ModelSerializer):
         fields = ["title", "content", "header_img", "is_public", "tags", "created_at"]
 
 
-class DocSearchSerializer(serializers.Serializer):
+class DocSearchSerializer(Serializer):
     """
     Search Doc
     """

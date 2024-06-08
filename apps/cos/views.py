@@ -1,7 +1,7 @@
 from dataclasses import asdict
 
 from django.conf import settings
-from ovinc_client.core.viewsets import CreateMixin, MainViewSet
+from ovinc_client.core.viewsets import MainViewSet
 from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -13,7 +13,7 @@ from apps.cos.permissions import UploadFilePermission
 from apps.cos.serializers import GenerateTempSecretSerializer
 
 
-class COSViewSet(CreateMixin, MainViewSet):
+class COSViewSet(MainViewSet):
     """
     COS
     """
@@ -22,7 +22,7 @@ class COSViewSet(CreateMixin, MainViewSet):
     permission_classes = [UploadFilePermission]
 
     @action(methods=["POST"], detail=False)
-    def temp_secret(self, request: Request, *args, **kwargs):
+    async def temp_secret(self, request: Request, *args, **kwargs):
         """
         Generate New Temp Secret for COS
         """
@@ -37,5 +37,5 @@ class COSViewSet(CreateMixin, MainViewSet):
         request_data = serializer.validated_data
 
         # generate
-        data = STSClient.generate_cos_upload_credential(user=request.user, filename=request_data["filename"])
+        data = await STSClient.generate_cos_upload_credential(user=request.user, filename=request_data["filename"])
         return Response(asdict(data))
