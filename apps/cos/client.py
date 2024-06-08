@@ -1,5 +1,6 @@
 import traceback
 
+from channels.db import database_sync_to_async
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -21,11 +22,13 @@ class STSClient:
     """
 
     @classmethod
-    def generate_cos_upload_credential(cls, user: USER_MODEL, filename: str) -> COSCredential:
+    async def generate_cos_upload_credential(cls, user: USER_MODEL, filename: str) -> COSCredential:
         try:
-            cos_log = COSLog.objects.create(filename=filename, key=COSLog.build_key(filename), resp={}, owner=user)
+            cos_log = await database_sync_to_async(COSLog.objects.create)(
+                filename=filename, key=COSLog.build_key(filename), resp={}, owner=user
+            )
         except IntegrityError:
-            return cls.generate_cos_upload_credential(user=user, filename=filename)
+            return await cls.generate_cos_upload_credential(user=user, filename=filename)
         tencent_cloud_api_domain = settings.QCLOUD_API_DOMAIN_TMPL.format("sts")
         config = {
             "domain": tencent_cloud_api_domain,
@@ -59,7 +62,7 @@ class STSClient:
             raise TempKeyGenerateFailed() from err
         finally:
             cos_log.resp = response
-            cos_log.save(update_fields=["resp"])
+            await database_sync_to_async(cos_log.save)(update_fields=["resp"])
 
 
 class COSClient:
@@ -74,7 +77,7 @@ class COSClient:
         )
         self.client = CosS3Client(self.config)
 
-    def upload(self, file: InMemoryUploadedFile, path: str, *args, **kwargs) -> None:
+    async def upload(self, file: InMemoryUploadedFile, path: str, *args, **kwargs) -> None:
         try:
             resp = self.client.put_object(Bucket=settings.QCLOUD_COS_BUCKET, Body=file, Key=path, *args, **kwargs)
         except Exception as err:

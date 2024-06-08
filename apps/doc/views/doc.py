@@ -1,6 +1,7 @@
+from channels.db import database_sync_to_async
 from django.conf import settings
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.utils import timezone
 from ovinc_client.core.auth import SessionAuthenticate
 from ovinc_client.core.paginations import NumPagination
@@ -47,7 +48,7 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
         return permissions
 
     # pylint: disable=R0914
-    def list(self, request: Request, *args, **kwargs):
+    async def list(self, request: Request, *args, **kwargs):
         """
         Doc List
         """
@@ -99,24 +100,33 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
 
         # Page
         page = NumPagination()
-        queryset = page.paginate_queryset(queryset=queryset, request=request, view=self)
+        queryset = await database_sync_to_async(page.paginate_queryset)(queryset=queryset, request=request, view=self)
 
         # Serialize
         serializer = DocListSerializer(instance=queryset, many=True)
-        return page.get_paginated_response(serializer.data)
+        return page.get_paginated_response(await serializer.adata)
 
-    def retrieve(self, request: Request, *args, **kwargs):
+    async def retrieve(self, request: Request, *args, **kwargs):
         """
         Doc Info
         """
 
+        inst: QuerySet = await database_sync_to_async(self.get_and_incr_read)()
+        serializer = DocInfoSerializer(instance=inst, many=True)
+        data = await serializer.adata
+        return Response(data[0])
+
+    def get_and_incr_read(self) -> QuerySet:
         inst: Doc = self.get_object()
         inst.record_read()
-        inst.refresh_from_db()
-        return Response(DocInfoSerializer(instance=inst).data)
+        return (
+            Doc.objects.filter(pk=inst.pk)
+            .prefetch_related("owner")
+            .prefetch_related("comment_set")
+            .prefetch_related("doctag_set__tag")
+        )
 
-    @transaction.atomic()
-    def create(self, request: Request, *args, **kwargs):
+    async def create(self, request: Request, *args, **kwargs):
         """
         Create Doc
         """
@@ -126,6 +136,13 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
         serializer.is_valid(raise_exception=True)
         request_data = serializer.validated_data
 
+        # Create
+        doc = await database_sync_to_async(self.create_and_bind_tag)(request, request_data)
+
+        return Response({"id": doc.id})
+
+    @transaction.atomic()
+    def create_and_bind_tag(self, request: Request, request_data: dict) -> Doc:
         # Create Doc
         doc = Doc.objects.create(
             title=request_data["title"],
@@ -140,22 +157,28 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
         # Create Doc Tag Relation
         doc.bind_tags(tags=request_data["tags"])
 
-        return Response({"id": doc.id})
+        return doc
 
-    @transaction.atomic()
-    def update(self, request: Request, *args, **kwargs):
+    async def update(self, request: Request, *args, **kwargs):
         """
         Update Doc
         """
 
         # Load Inst
-        inst: Doc = self.get_object()
+        inst: Doc = await database_sync_to_async(self.get_object)()
 
         # Validate
         serializer = EditDocSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         request_data = serializer.validated_data
 
+        # Update
+        await database_sync_to_async(self.update_and_bind_tag)(inst, request_data)
+
+        return Response({"id": inst.id})
+
+    @transaction.atomic()
+    def update_and_bind_tag(self, inst: Doc, request_data):
         # Update Tag
         inst.bind_tags(request_data.pop("tags", []))
 
@@ -165,4 +188,11 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
         inst.updated_at = timezone.now()
         inst.save(update_fields=[*request_data.keys(), "updated_at"])
 
-        return Response({"id": inst.id})
+    async def destroy(self, request, *args, **kwargs):
+        """
+        Delete Doc
+        """
+
+        inst = await database_sync_to_async(self.get_object)()
+        await database_sync_to_async(inst.delete)()
+        return Response()

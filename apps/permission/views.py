@@ -1,3 +1,4 @@
+from channels.db import database_sync_to_async
 from ovinc_client.core.auth import SessionAuthenticate
 from ovinc_client.core.viewsets import ListMixin, MainViewSet
 from rest_framework.response import Response
@@ -14,11 +15,11 @@ class UserPermissionViewSet(ListMixin, MainViewSet):
     queryset = UserPermission.objects.all()
     authentication_classes = [SessionAuthenticate]
 
-    def list(self, request, *args, **kwargs):
+    async def list(self, request, *args, **kwargs):
         """
         List Current User Permissions
         """
 
-        queryset = UserPermission.load_permissions(request.user)
+        queryset = await database_sync_to_async(UserPermission.load_permissions)(request.user)
         serializer = UserPermissionListSerializer(queryset, many=True)
-        return Response(serializer.data)
+        return Response(await serializer.adata)

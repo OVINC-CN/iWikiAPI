@@ -1,8 +1,9 @@
+from adrf.serializers import Serializer
 from django.utils.translation import gettext, gettext_lazy
 from rest_framework import serializers
 
 
-class GenerateTempSecretSerializer(serializers.Serializer):
+class GenerateTempSecretSerializer(Serializer):
     """
     Temp Secret
     """

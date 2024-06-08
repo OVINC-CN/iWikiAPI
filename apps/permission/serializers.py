@@ -1,9 +1,9 @@
-from rest_framework import serializers
+from adrf.serializers import ModelSerializer
 
 from apps.permission.models import UserPermission
 
 
-class UserPermissionListSerializer(serializers.ModelSerializer):
+class UserPermissionListSerializer(ModelSerializer):
     """
     User Permission
     """

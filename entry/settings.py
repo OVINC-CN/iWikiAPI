@@ -1,10 +1,13 @@
 import os
 from pathlib import Path
 
+import nest_asyncio
 from bkcrypto.constants import SymmetricCipherType
 from environ import environ
 from ovinc_client.core.logger import get_logging_config_dict
 from ovinc_client.core.utils import getenv_or_raise, strtobool
+
+nest_asyncio.apply()
 
 # Base Dir
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,6 +32,7 @@ FRONTEND_URL = getenv_or_raise("FRONTEND_URL")
 
 # APPs
 INSTALLED_APPS = [
+    "daphne",
     "corsheaders",
     "simpleui",
     "django.contrib.auth",
@@ -38,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "adrf",
     "sslserver",
     "ovinc_client.account",
     "ovinc_client.trace",
@@ -89,8 +94,8 @@ TEMPLATES = [
     },
 ]
 
-# WSGI
-WSGI_APPLICATION = "entry.wsgi.application"
+# ASGI
+ASGI_APPLICATION = "entry.asgi.application"
 
 # DB and Cache
 DATABASES = {
@@ -116,6 +121,9 @@ CACHES = {
         "LOCATION": f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}",
     }
 }
+
+# ASGI
+ASGI_APPLICATION = "entry.asgi.application"
 
 # Auth
 AUTH_PASSWORD_VALIDATORS = [
