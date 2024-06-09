@@ -1,4 +1,4 @@
-from asgiref.sync import sync_to_async
+from channels.db import database_sync_to_async
 from django.conf import settings
 from django.db import transaction
 from django.db.models import Q, QuerySet
@@ -100,7 +100,7 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
 
         # Page
         page = NumPagination()
-        queryset = await sync_to_async(page.paginate_queryset)(queryset=queryset, request=request, view=self)
+        queryset = await database_sync_to_async(page.paginate_queryset)(queryset=queryset, request=request, view=self)
 
         # Serialize
         serializer = DocListSerializer(instance=queryset, many=True)
@@ -111,7 +111,7 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
         Doc Info
         """
 
-        inst: QuerySet = await sync_to_async(self.get_and_incr_read)()
+        inst: QuerySet = await database_sync_to_async(self.get_and_incr_read)()
         serializer = DocInfoSerializer(instance=inst, many=True)
         data = await serializer.adata
         return Response(data[0])
@@ -137,7 +137,7 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
         request_data = serializer.validated_data
 
         # Create
-        doc = await sync_to_async(self.create_and_bind_tag)(request, request_data)
+        doc = await database_sync_to_async(self.create_and_bind_tag)(request, request_data)
 
         return Response({"id": doc.id})
 
@@ -165,7 +165,7 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
         """
 
         # Load Inst
-        inst: Doc = await sync_to_async(self.get_object)()
+        inst: Doc = await database_sync_to_async(self.get_object)()
 
         # Validate
         serializer = EditDocSerializer(data=request.data)
@@ -173,7 +173,7 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
         request_data = serializer.validated_data
 
         # Update
-        await sync_to_async(self.update_and_bind_tag)(inst, request_data)
+        await database_sync_to_async(self.update_and_bind_tag)(inst, request_data)
 
         return Response({"id": inst.id})
 
@@ -193,6 +193,6 @@ class DocViewSet(ListMixin, RetrieveMixin, CreateMixin, UpdateMixin, DestroyMixi
         Delete Doc
         """
 
-        inst = await sync_to_async(self.get_object)()
-        await sync_to_async(inst.delete)()
+        inst = await database_sync_to_async(self.get_object)()
+        await database_sync_to_async(inst.delete)()
         return Response()

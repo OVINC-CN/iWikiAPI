@@ -1,4 +1,4 @@
-from asgiref.sync import sync_to_async
+from channels.db import database_sync_to_async
 from django.db.models import QuerySet
 from ovinc_client.core.auth import SessionAuthenticate
 from ovinc_client.core.viewsets import ListMixin, MainViewSet
@@ -23,7 +23,7 @@ class TagViewSet(ListMixin, MainViewSet):
         Tag List
         """
 
-        tags = await sync_to_async(self.list_tags)()
+        tags = await database_sync_to_async(self.list_tags)()
         serializer = TagInfoSerializer(instance=tags, many=True)
         return Response(data=await serializer.adata)
 
@@ -36,7 +36,7 @@ class TagViewSet(ListMixin, MainViewSet):
         Bound Tags
         """
 
-        tags = await sync_to_async(self.filter_tags)()
+        tags = await database_sync_to_async(self.filter_tags)()
         serializer = TagInfoSerializer(instance=tags, many=True)
         return Response(data=await serializer.adata)
 

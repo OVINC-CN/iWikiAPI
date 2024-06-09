@@ -1,6 +1,6 @@
 import traceback
 
-from asgiref.sync import sync_to_async
+from channels.db import database_sync_to_async
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -24,7 +24,7 @@ class STSClient:
     @classmethod
     async def generate_cos_upload_credential(cls, user: USER_MODEL, filename: str) -> COSCredential:
         try:
-            cos_log = await sync_to_async(COSLog.objects.create)(
+            cos_log = await database_sync_to_async(COSLog.objects.create)(
                 filename=filename, key=COSLog.build_key(filename), resp={}, owner=user
             )
         except IntegrityError:
@@ -62,7 +62,7 @@ class STSClient:
             raise TempKeyGenerateFailed() from err
         finally:
             cos_log.resp = response
-            await sync_to_async(cos_log.save)(update_fields=["resp"])
+            await database_sync_to_async(cos_log.save)(update_fields=["resp"])
 
 
 class COSClient:
