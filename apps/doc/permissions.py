@@ -1,4 +1,4 @@
-from channels.db import database_sync_to_async
+from asgiref.sync import sync_to_async
 from rest_framework.permissions import BasePermission
 from rest_framework.request import Request
 from rest_framework.viewsets import GenericViewSet
@@ -17,7 +17,7 @@ class DocOwnerPermission(BasePermission):
         return True
 
     async def has_object_permission(self, request: Request, view: GenericViewSet, obj: Doc):
-        return await database_sync_to_async(self._has_object_permission)(request, view, obj)
+        return await sync_to_async(self._has_object_permission)(request, view, obj)
 
     def _has_object_permission(self, request: Request, view: GenericViewSet, obj: Doc):
         # Retrieve Public Inst is Allowed
@@ -33,6 +33,6 @@ class CreateDocPermission(BasePermission):
     """
 
     async def has_permission(self, request, view):
-        return await database_sync_to_async(UserPermission.check_permission)(
+        return await sync_to_async(UserPermission.check_permission)(
             user=request.user, permission_item=PermissionItem.CREATE_DOC
         )

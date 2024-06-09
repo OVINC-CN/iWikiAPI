@@ -1,4 +1,4 @@
-from channels.db import database_sync_to_async
+from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.conf.global_settings import LANGUAGE_COOKIE_NAME
 from django.contrib.auth import get_user_model
@@ -36,7 +36,7 @@ class SitemapView(ListMixin, MainViewSet):
     authentication_classes = [SessionAuthenticate]
 
     async def list(self, request, *args, **kwargs):
-        sitemap = await database_sync_to_async(Sitemap)()
+        sitemap = await sync_to_async(Sitemap)()
         return HttpResponse(content=sitemap.tree.toxml(), content_type="application/xml")
 
 
