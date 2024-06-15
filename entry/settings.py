@@ -1,13 +1,10 @@
 import os
 from pathlib import Path
 
-import nest_asyncio
 from bkcrypto.constants import SymmetricCipherType
 from environ import environ
 from ovinc_client.core.logger import get_logging_config_dict
 from ovinc_client.core.utils import getenv_or_raise, strtobool
-
-nest_asyncio.apply()
 
 # Base Dir
 BASE_DIR = Path(__file__).resolve().parent.parent
