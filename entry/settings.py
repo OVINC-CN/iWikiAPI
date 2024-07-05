@@ -193,11 +193,9 @@ CELERY_ACCEPT_CONTENT = ["pickle", "json"]
 BROKER_URL = f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
 
 # APM
-ENABLE_TRACE = strtobool(os.getenv("ENABLE_TRACE", "True"))
-JAEGER_HOST = os.getenv("JAEGER_HOST", "localhost")
-JAEGER_PORT = int(os.getenv("JAEGER_PORT", "6831"))
+ENABLE_TRACE = strtobool(os.getenv("ENABLE_TRACE", "False"))
 SERVICE_NAME = os.getenv("SERVICE_NAME", APP_CODE)
-OTLP_HOST = os.getenv("OTLP_HOST", "")
+OTLP_HOST = os.getenv("OTLP_HOST", "http://127.0.0.1:4317")
 OTLP_TOKEN = os.getenv("OTLP_TOKEN", "")
 
 # RUM
@@ -217,12 +215,22 @@ BKCRYPTO = {
 # QCLOUD
 QCLOUD_SECRET_ID = os.getenv("QCLOUD_SECRET_ID")
 QCLOUD_SECRET_KEY = os.getenv("QCLOUD_SECRET_KEY")
+
+# COS
 QCLOUD_COS_REGION = os.getenv("QCLOUD_COS_REGION", "ap-beijing")
 QCLOUD_COS_BUCKET = os.getenv("QCLOUD_COS_BUCKET")
 QCLOUD_COS_URL = os.getenv("QCLOUD_COS_URL")
 QCLOUD_API_DOMAIN_TMPL = os.getenv("QCLOUD_API_DOMAIN_TMPL", "{}.tencentcloudapi.com")
 QCLOUD_API_SCHEME = os.getenv("QCLOUD_API_SCHEME", "https")
 QCLOUD_STS_EXPIRE_TIME = int(os.getenv("QCLOUD_STS_EXPIRE_TIME", str(60 * 10)))
+
+# Captcha
+CAPTCHA_TCLOUD_ID = os.getenv("CAPTCHA_TCLOUD_ID", QCLOUD_SECRET_ID)
+CAPTCHA_TCLOUD_KEY = os.getenv("CAPTCHA_TCLOUD_KEY", QCLOUD_SECRET_KEY)
+CAPTCHA_ENABLED = strtobool(os.getenv("CAPTCHA_ENABLED", "False"))
+CAPTCHA_APP_ID = int(os.getenv("CAPTCHA_APP_ID", "0"))
+CAPTCHA_APP_SECRET = os.getenv("CAPTCHA_APP_SECRET", "")
+CAPTCHA_APP_INFO_TIMEOUT = int(os.getenv("CAPTCHA_APP_INFO_TIMEOUT", str(60 * 10)))
 
 # User Whitelist
 USER_WHITELIST = [u for u in os.getenv("USER_WHITELIST", "").split(",") if u]
