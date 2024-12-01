@@ -27,7 +27,7 @@ class TCloudUrlParser:
         return str(urlunparse(self._parsed_url))
 
     def add_cdn_signed_param(self) -> None:
-        if not self._url or not settings.QCLOUD_CDN_SING_KEY:
+        if not self._url or not settings.QCLOUD_CDN_SIGN_KEY:
             return
         self._query_params[settings.QCLOUD_CDN_SIGN_KEY_URL_PARAM] = [self.sign(path=self._parsed_url.path)]
 
@@ -41,5 +41,5 @@ class TCloudUrlParser:
         timestamp = int(time.time())
         nonce = uniq_id_without_time()
         uid = "0"
-        signature = md5(f"{path}-{timestamp}-{nonce}-{uid}-{settings.QCLOUD_CDN_SING_KEY}".encode()).hexdigest()
+        signature = md5(f"{path}-{timestamp}-{nonce}-{uid}-{settings.QCLOUD_CDN_SIGN_KEY}".encode()).hexdigest()
         return f"{timestamp}-{nonce}-{uid}-{signature}"
