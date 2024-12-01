@@ -1,4 +1,5 @@
 import traceback
+from urllib.parse import quote
 
 from channels.db import database_sync_to_async
 from django.conf import settings
@@ -12,6 +13,7 @@ from sts.sts import Sts
 
 from apps.cos.exceptions import TempKeyGenerateFailed, UploadFailed
 from apps.cos.models import COSCredential, COSLog
+from apps.cos.utils import TCloudUrlParser
 
 USER_MODEL: User = get_user_model()
 
@@ -62,6 +64,7 @@ class STSClient:
                 token=response["credentials"]["sessionToken"],
                 start_time=response["startTime"],
                 expired_time=response["expiredTime"],
+                cdn_sign=TCloudUrlParser.sign("/" + quote(cos_log.key.lstrip("/"), safe="")),
             )
         except Exception as err:
             logger.exception("[TempKeyGenerateFailed] %s", err)

@@ -1,5 +1,9 @@
+import re
+
 from django.utils.translation import gettext_lazy
 from ovinc_client.core.models import TextChoices
+
+MD_URL_RE = re.compile(r"\[([^\]]+)\]\((http[s]?://[^\)]+)\)")
 
 
 class DocSearchType(TextChoices):

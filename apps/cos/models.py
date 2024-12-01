@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy
@@ -50,3 +51,6 @@ class COSCredential:
     token: str
     start_time: int
     expired_time: int
+    cdn_sign: str
+    cdn_sign_param: str = settings.QCLOUD_CDN_SIGN_KEY_URL_PARAM
+    image_format: str = settings.QCLOUD_COS_IMAGE_FORMAT

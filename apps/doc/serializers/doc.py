@@ -1,3 +1,4 @@
+import re
 from typing import List
 
 from adrf.serializers import ModelSerializer, Serializer
@@ -5,6 +6,8 @@ from django.utils.translation import gettext_lazy
 from ovinc_client.core.constants import SHORT_CHAR_LENGTH
 from rest_framework import serializers
 
+from apps.cos.utils import TCloudUrlParser
+from apps.doc.constants import MD_URL_RE
 from apps.doc.models import Doc
 from apps.doc.serializers.tag import TagInfoSerializer
 
@@ -29,6 +32,11 @@ class DocListSerializer(ModelSerializer):
         model = Doc
         exclude = ["content"]
 
+    async def ato_representation(self, instance: Doc):
+        data = await super().ato_representation(instance)
+        data["header_img"] = TCloudUrlParser(data["header_img"]).url
+        return data
+
     def get_tags(self, instance: Doc) -> List[dict]:
         tags = [TagInfoSerializer(instance=dt.tag).data["name"] for dt in instance.doctag_set.all()]
         tags.sort()
@@ -43,6 +51,15 @@ class DocInfoSerializer(DocListSerializer):
     class Meta:
         model = Doc
         fields = "__all__"
+
+    async def ato_representation(self, instance: Doc) -> dict:
+        data = await super().ato_representation(instance)
+        data["header_img"] = TCloudUrlParser(data["header_img"]).url
+        data["content"] = MD_URL_RE.sub(self.sign_inline_link, data["content"])
+        return data
+
+    def sign_inline_link(self, match: re.Match):
+        return f"[{match.group(1)}]({TCloudUrlParser(match.group(2)).url})"
 
 
 class EditDocSerializer(ModelSerializer):
