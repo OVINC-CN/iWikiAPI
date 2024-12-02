@@ -65,7 +65,7 @@ class STSClient:
                 start_time=response["startTime"],
                 expired_time=response["expiredTime"],
                 cdn_sign=TCloudUrlParser.sign("/" + quote(cos_log.key.lstrip("/"), safe="")),
-                image_format=settings.QCLOUD_COS_IMAGE_STYLE
+                image_format=settings.QCLOUD_COS_IMAGE_FORMAT
                 if cos_log.key.split(".")[-1] in settings.QCLOUD_COS_IMAGE_SUFFIX
                 else "",
             )
