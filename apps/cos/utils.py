@@ -34,7 +34,8 @@ class TCloudUrlParser:
     def add_ci_param(self) -> None:
         if not self._url or not settings.QCLOUD_COS_IMAGE_FORMAT:
             return
-        self._query_params[settings.QCLOUD_COS_IMAGE_FORMAT] = [""]
+        if self._parsed_url.path.rsplit(".", 1)[-1] in settings.QCLOUD_COS_IMAGE_SUFFIX:
+            self._query_params[settings.QCLOUD_COS_IMAGE_FORMAT] = [""]
 
     @classmethod
     def sign(cls, path: str) -> str:

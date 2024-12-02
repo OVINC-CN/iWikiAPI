@@ -53,4 +53,4 @@ class COSCredential:
     expired_time: int
     cdn_sign: str
     cdn_sign_param: str = settings.QCLOUD_CDN_SIGN_KEY_URL_PARAM
-    image_format: str = settings.QCLOUD_COS_IMAGE_FORMAT
+    image_format: str = ""

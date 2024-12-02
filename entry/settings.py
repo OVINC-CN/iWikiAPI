@@ -231,6 +231,7 @@ QCLOUD_API_DOMAIN_TMPL = os.getenv("QCLOUD_API_DOMAIN_TMPL", "{}.tencentcloudapi
 QCLOUD_API_SCHEME = os.getenv("QCLOUD_API_SCHEME", "https")
 QCLOUD_STS_EXPIRE_TIME = int(os.getenv("QCLOUD_STS_EXPIRE_TIME", str(60 * 10)))
 QCLOUD_COS_IMAGE_FORMAT = os.getenv("QCLOUD_COS_IMAGE_FORMAT", "imageMogr2/quality/80/format/webp/interlace/1")
+QCLOUD_COS_IMAGE_SUFFIX = ["jpg", "jpeg", "png", "bmp", "webp", "tiff", "gif", "avif", "heif", "heic", "tpg", "apng"]
 
 # Captcha
 CAPTCHA_TCLOUD_ID = os.getenv("CAPTCHA_TCLOUD_ID", QCLOUD_SECRET_ID)
