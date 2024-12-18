@@ -1,13 +1,13 @@
 # ovinc
-ovinc-client==0.3.14
+ovinc-client==0.3.15
+
+# Celery
+celery==5.4.0
 
 # Async
 asgiref==3.8.1
 channels[daphne]==4.2.0
 channels_redis==4.2.1
-
-# Celery
-celery==5.4.0
 
 # Server
 gunicorn==23.0.0
@@ -28,4 +28,4 @@ qcloud-python-sts==3.1.5
 cos-python-sdk-v5==1.9.25
 
 # crypto
-ovinc-crypto==2.0.1b0
+bk-crypto-python-sdk==2.0.1
