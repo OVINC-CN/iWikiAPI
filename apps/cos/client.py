@@ -1,4 +1,5 @@
 import traceback
+from io import BytesIO
 from urllib.parse import quote
 
 from channels.db import database_sync_to_async
@@ -90,7 +91,7 @@ class COSClient:
         )
         self.client = CosS3Client(self.config)
 
-    async def upload(self, file: InMemoryUploadedFile, path: str, *args, **kwargs) -> None:
+    async def upload(self, file: InMemoryUploadedFile | BytesIO, path: str, *args, **kwargs) -> None:
         try:
             resp = self.client.put_object(Bucket=settings.QCLOUD_COS_BUCKET, Body=file, Key=path, *args, **kwargs)
         except Exception as err:

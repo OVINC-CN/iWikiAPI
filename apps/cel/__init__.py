@@ -13,19 +13,19 @@ app.autodiscover_tasks()
 
 # Schedule Tasks
 app.conf.beat_schedule = {
-    "celery_debug": {
-        "task": "apps.cel.tasks.debug.celery_debug",
-        "schedule": crontab(minute="*"),
+    "remove_unused_tags": {
+        "task": "apps.doc.tasks.remove_unused_tags",
+        "schedule": crontab(minute="0"),
         "args": (),
     },
-    "remove_unused_tags": {
-        "task": "apps.cel.tasks.doc.remove_unused_tags",
-        "schedule": crontab(minute="0", hour="2"),
+    "build_rss": {
+        "task": "apps.doc.tasks.build_rss",
+        "schedule": crontab(minute="0"),
         "args": (),
     },
     "generate_sitemap": {
-        "task": "apps.cel.tasks.home.generate_sitemap",
-        "schedule": crontab(minute="0", hour="0"),
+        "task": "apps.home.tasks.generate_sitemap",
+        "schedule": crontab(minute="0"),
         "args": (),
     },
 }

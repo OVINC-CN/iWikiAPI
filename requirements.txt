@@ -29,3 +29,6 @@ cos-python-sdk-v5==1.9.25
 
 # crypto
 bk-crypto-python-sdk==2.0.1
+
+# RSS
+PyRSS2Gen==1.1

@@ -251,3 +251,7 @@ USER_WHITELIST = [u for u in os.getenv("USER_WHITELIST", "").split(",") if u]
 # Doc
 # One of DocSearchType
 DOC_SEARCH_TYPE = os.getenv("DOC_SEARCH_TYPE", "all")
+DOC_RSS_BUILD_SIZE = int(os.getenv("DOC_RSS_BUILD_SIZE", "100"))
+DOC_RSS_BUILD_TITLE = os.getenv("DOC_RSS_BUILD_TITLE")
+DOC_RSS_BUILD_DESCRIPTION = os.getenv("DOC_RSS_BUILD_DESCRIPTION")
+DOC_RSS_BUILD_PATH = os.getenv("DOC_RSS_BUILD_PATH", "rss.xml")
