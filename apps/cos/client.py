@@ -42,14 +42,10 @@ class STSClient:
             "bucket": settings.QCLOUD_COS_BUCKET,
             "region": settings.QCLOUD_COS_REGION,
             "allow_prefix": [cos_log.key],
-            "allow_actions": [
-                "cos:PutObject",
-                "cos:ListMultipartUploads",
-                "cos:ListParts",
-                "cos:InitiateMultipartUpload",
-                "cos:UploadPart",
-                "cos:CompleteMultipartUpload",
-            ],
+            "allow_actions": ["cos:PutObject"],
+            "condition": {
+                "numeric_less_than_equal": {"cos:content-length": settings.QCLOUD_COS_MAX_FILE_SIZE},
+            },
         }
         response = {}
         try:
