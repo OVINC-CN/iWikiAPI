@@ -1,6 +1,6 @@
 import traceback
 from io import BytesIO
-from urllib.parse import quote
+from urllib.parse import quote, urlparse
 
 from channels.db import database_sync_to_async
 from django.conf import settings
@@ -65,7 +65,10 @@ class STSClient:
                 token=response["credentials"]["sessionToken"],
                 start_time=response["startTime"],
                 expired_time=response["expiredTime"],
-                cdn_sign=TCloudUrlParser.sign("/" + quote(cos_log.key.lstrip("/"), safe="")),
+                cdn_sign=TCloudUrlParser.sign(
+                    hostname=urlparse(settings.QCLOUD_COS_URL).hostname,
+                    path="/" + quote(cos_log.key.lstrip("/"), safe=""),
+                ),
                 image_format=settings.QCLOUD_COS_IMAGE_FORMAT
                 if cos_log.key.split(".")[-1] in settings.QCLOUD_COS_IMAGE_SUFFIX
                 else "",
