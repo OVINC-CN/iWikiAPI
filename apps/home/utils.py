@@ -1,7 +1,6 @@
 import datetime
 import xml.dom.minidom
 
-from asgiref.sync import async_to_sync
 from django.conf import settings
 from ovinc_client.core.logger import logger
 
@@ -57,4 +56,4 @@ class Sitemap:
         if not settings.QCLOUD_SECRET_ID or not settings.QCLOUD_SECRET_KEY:
             logger.warning("[Sitemap] QCloud Init Unfinished")
             return
-        async_to_sync(COSClient().upload)(self.tree.toxml(), "sitemap.xml", ContentType="application/xml")
+        COSClient().upload(self.tree.toxml(), "sitemap.xml", ContentType="application/xml")

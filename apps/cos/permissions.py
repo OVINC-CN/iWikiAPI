@@ -1,4 +1,3 @@
-from channels.db import database_sync_to_async
 from rest_framework.permissions import BasePermission
 
 from apps.permission.constants import PermissionItem
@@ -10,7 +9,5 @@ class UploadFilePermission(BasePermission):
     Upload File Permission
     """
 
-    async def has_permission(self, request, view):
-        return await database_sync_to_async(UserPermission.check_permission)(
-            user=request.user, permission_item=PermissionItem.UPLOAD_FILE
-        )
+    def has_permission(self, request, view):
+        return UserPermission.check_permission(user=request.user, permission_item=PermissionItem.UPLOAD_FILE)

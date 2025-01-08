@@ -1,7 +1,6 @@
 from io import BytesIO
 
 import PyRSS2Gen
-from asgiref.sync import async_to_sync
 from django.conf import settings
 from django.db import transaction
 from django.utils import timezone
@@ -50,7 +49,7 @@ def build_rss(self):
         )
         output = BytesIO()
         rss.write_xml(output, encoding="utf-8")
-        async_to_sync(COSClient().upload)(file=output.getbuffer(), path=settings.DOC_RSS_BUILD_PATH)
+        COSClient().upload(file=output.getbuffer(), path=settings.DOC_RSS_BUILD_PATH)
         logger.info("[BuildRSS] Success: %s %s", rss.title, rss.link)
     except Exception as e:  # pylint: disable=W0718
         logger.exception("[BuildRSS] Failed %s", e)

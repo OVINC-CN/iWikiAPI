@@ -1,4 +1,3 @@
-from channels.db import database_sync_to_async
 from django.conf import settings
 from django.conf.global_settings import LANGUAGE_COOKIE_NAME
 from django.contrib.auth import get_user_model
@@ -23,9 +22,9 @@ class HomeView(MainViewSet):
     queryset = USER_MODEL.get_queryset()
     authentication_classes = [SessionAuthenticate]
 
-    async def list(self, request, *args, **kwargs):
+    def list(self, request, *args, **kwargs):
         msg = f"[{request.method}] Connect Success"
-        return Response({"resp": msg, "user": await UserInfoSerializer(instance=request.user).adata})
+        return Response({"resp": msg, "user": UserInfoSerializer(instance=request.user).data})
 
 
 class SitemapView(ListMixin, MainViewSet):
@@ -35,9 +34,8 @@ class SitemapView(ListMixin, MainViewSet):
 
     authentication_classes = [SessionAuthenticate]
 
-    async def list(self, request, *args, **kwargs):
-        sitemap = await database_sync_to_async(Sitemap)()
-        return HttpResponse(content=sitemap.tree.toxml(), content_type="application/xml")
+    def list(self, request, *args, **kwargs):
+        return HttpResponse(content=Sitemap().tree.toxml(), content_type="application/xml")
 
 
 class I18nViewSet(MainViewSet):
@@ -47,7 +45,7 @@ class I18nViewSet(MainViewSet):
 
     authentication_classes = [SessionAuthenticate]
 
-    async def create(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         """
         Change Language
         """
@@ -76,7 +74,7 @@ class FeatureView(ListMixin, MainViewSet):
 
     authentication_classes = [SessionAuthenticate]
 
-    async def list(self, request, *args, **kwargs):
+    def list(self, request, *args, **kwargs):
         """
         List all features
         """
