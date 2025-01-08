@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-12 12:14+0800\n"
+"POT-Creation-Date: 2025-01-08 16:58+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -90,6 +90,12 @@ msgstr "文章"
 msgid "Content"
 msgstr "内容"
 
+msgid "All"
+msgstr "全部"
+
+msgid "Doc Search Type Invalid"
+msgstr "不支持的文档搜索类型"
+
 msgid "Updated Time"
 msgstr "更新时间"
 
@@ -129,11 +135,17 @@ msgstr "拥有者昵称"
 msgid "Comment Count"
 msgstr "评论数量"
 
+msgid "Keywords"
+msgstr "关键词"
+
 msgid "Home Module"
 msgstr "主模块"
 
 msgid "Language Code Invalid"
 msgstr "语言ID非法"
+
+msgid "Access Forbidden"
+msgstr "未授权访问"
 
 msgid "Language Code"
 msgstr "语言ID"
@@ -164,3 +176,135 @@ msgstr "授权时间"
 
 msgid "User Permission"
 msgstr "用户权限"
+
+msgid "Is Expired"
+msgstr "已过期"
+
+msgid "Yes"
+msgstr "是"
+
+msgid "No"
+msgstr "否"
+
+msgid "User Account"
+msgstr "用户账户"
+
+msgid "Personal"
+msgstr "个人"
+
+msgid "Platform"
+msgstr "平台"
+
+msgid "Avatar"
+msgstr "头像"
+
+msgid "Phone Number"
+msgstr "联系电话"
+
+msgid "Mail Address"
+msgstr "邮件地址"
+
+msgid "Code Verify Failed"
+msgstr "验证码非法"
+
+msgid "Username Cannot be Empty"
+msgstr "用户名不能为空"
+
+msgid "username"
+msgstr "用户名"
+
+msgid "already in use"
+msgstr "已被使用"
+
+msgid "User Type"
+msgstr "用户类型"
+
+msgid "Date Joined"
+msgstr "注册日期"
+
+msgid "Is Staff"
+msgstr "是否管理员"
+
+msgid "Session Key"
+msgstr "会话Key"
+
+msgid "Cache Key"
+msgstr "缓存Key"
+
+msgid "Login IP"
+msgstr "登录IP"
+
+msgid "User Agent"
+msgstr "用户代理"
+
+msgid "Expired at"
+msgstr "过期时间"
+
+msgid "User Token"
+msgstr "用户令牌"
+
+msgid "Code"
+msgstr "Code"
+
+msgid "LIST"
+msgstr "LIST"
+
+msgid "CREATE"
+msgstr "CREATE"
+
+msgid "UPDATE"
+msgstr "UPDATE"
+
+msgid "PARTIAL_UPDATE"
+msgstr "PARTIAL_UPDATE"
+
+msgid "DESTROY"
+msgstr "DESTROY"
+
+msgid "Request Failed"
+msgstr "请求失败"
+
+msgid "Server Error"
+msgstr "服务异常"
+
+msgid "Login Required"
+msgstr "未登录"
+
+msgid "Login Failed"
+msgstr "登录失败"
+
+msgid "Permission Denied"
+msgstr "未授权"
+
+msgid "Operate Error"
+msgstr "操作异常"
+
+msgid "Resource Not Found"
+msgstr "资源未找到"
+
+msgid "Service Closed"
+msgstr "服务已关闭"
+
+msgid "Soft Delete"
+msgstr "软删除"
+
+msgid "Invalid Page Number"
+msgstr "页码异常"
+
+msgid "TCaptcha"
+msgstr "腾讯云验证码"
+
+msgid "Success"
+msgstr "成功"
+
+msgid "Low"
+msgstr "低"
+
+msgid "High"
+msgstr "高"
+
+msgid "TCaptcha Verify Failed"
+msgstr "验证码非法"
+
+msgid "App Performance"
+msgstr "应用性能"

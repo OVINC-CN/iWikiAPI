@@ -1,4 +1,4 @@
-from adrf.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer
 
 from apps.permission.models import UserPermission
 

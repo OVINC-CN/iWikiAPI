@@ -22,7 +22,7 @@ class COSViewSet(MainViewSet):
     permission_classes = [UploadFilePermission]
 
     @action(methods=["POST"], detail=False)
-    async def temp_secret(self, request: Request, *args, **kwargs):
+    def temp_secret(self, request: Request, *args, **kwargs):
         """
         Generate New Temp Secret for COS
         """
@@ -37,5 +37,5 @@ class COSViewSet(MainViewSet):
         request_data = serializer.validated_data
 
         # generate
-        data = await STSClient.generate_cos_upload_credential(user=request.user, filename=request_data["filename"])
+        data = STSClient.generate_cos_upload_credential(user=request.user, filename=request_data["filename"])
         return Response(asdict(data))

@@ -1,7 +1,6 @@
 import re
 from typing import List
 
-from adrf.serializers import ModelSerializer, Serializer
 from django.utils.translation import gettext_lazy
 from ovinc_client.core.constants import SHORT_CHAR_LENGTH
 from rest_framework import serializers
@@ -12,28 +11,24 @@ from apps.doc.models import Doc
 from apps.doc.serializers.tag import TagInfoSerializer
 
 
-class DocListSerializer(ModelSerializer):
+class DocListSerializer(serializers.ModelSerializer):
     """
     Doc List
     """
-
-    class TagsSerializerField(serializers.SerializerMethodField):
-        async def ato_representation(self, val):
-            return super().to_representation(val)
 
     owner_nick_name = serializers.CharField(
         label=gettext_lazy("Owner Nick Name"), read_only=True, source="owner.nick_name"
     )
     comments = serializers.IntegerField(label=gettext_lazy("Comment Count"), read_only=True, source="comment_set.count")
-    tags = TagsSerializerField(label=gettext_lazy("Tags"), read_only=True)
+    tags = serializers.SerializerMethodField(label=gettext_lazy("Tags"), read_only=True)
     owner = serializers.CharField(label=gettext_lazy("Owner"), read_only=True)
 
     class Meta:
         model = Doc
         exclude = ["content"]
 
-    async def ato_representation(self, instance: Doc):
-        data = await super().ato_representation(instance)
+    def to_representation(self, instance: Doc):
+        data = super().to_representation(instance)
         data["header_img"] = TCloudUrlParser(data["header_img"]).url
         return data
 
@@ -52,8 +47,8 @@ class DocInfoSerializer(DocListSerializer):
         model = Doc
         fields = "__all__"
 
-    async def ato_representation(self, instance: Doc) -> dict:
-        data = await super().ato_representation(instance)
+    def to_representation(self, instance: Doc) -> dict:
+        data = super().to_representation(instance)
         data["header_img"] = TCloudUrlParser(data["header_img"]).url
         data["content"] = MD_URL_RE.sub(self.sign_inline_link, data["content"])
         return data
@@ -62,7 +57,7 @@ class DocInfoSerializer(DocListSerializer):
         return f"[{match.group(1)}]({TCloudUrlParser(match.group(2)).url})"
 
 
-class EditDocSerializer(ModelSerializer):
+class EditDocSerializer(serializers.ModelSerializer):
     """
     Edit Doc
     """
@@ -78,7 +73,7 @@ class EditDocSerializer(ModelSerializer):
         fields = ["title", "content", "header_img", "is_public", "tags", "created_at"]
 
 
-class DocSearchSerializer(Serializer):
+class DocSearchSerializer(serializers.Serializer):
     """
     Search Doc
     """
