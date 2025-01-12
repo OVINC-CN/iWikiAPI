@@ -1,6 +1,6 @@
 {
   "template": "https://github.com/OVINC-CN/DevTemplateDjango.git",
-  "commit": "52d64c6084b234cee75dae63f8e1e5e3ba7ab0dc",
+  "commit": "768516cd9c67d6b4d5057df6e8e5761571f13884",
   "checkout": "main",
   "context": {
     "cookiecutter": {
