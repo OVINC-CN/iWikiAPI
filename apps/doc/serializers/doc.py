@@ -6,7 +6,7 @@ from ovinc_client.core.constants import SHORT_CHAR_LENGTH
 from rest_framework import serializers
 
 from apps.cos.utils import TCloudUrlParser
-from apps.doc.constants import MD_URL_RE
+from apps.doc.constants import HTML_TAG_URL_RE, MD_URL_RE
 from apps.doc.models import Doc
 from apps.doc.serializers.tag import TagInfoSerializer
 
@@ -51,10 +51,14 @@ class DocInfoSerializer(DocListSerializer):
         data = super().to_representation(instance)
         data["header_img"] = TCloudUrlParser(data["header_img"]).url
         data["content"] = MD_URL_RE.sub(self.sign_inline_link, data["content"])
+        data["content"] = HTML_TAG_URL_RE.sub(self.sign_src_link, data["content"])
         return data
 
     def sign_inline_link(self, match: re.Match):
         return f"[{match.group(1)}]({TCloudUrlParser(match.group(2)).url})"
+
+    def sign_src_link(self, match: re.Match):
+        return f'src="{TCloudUrlParser(match.group(1)).url}"'
 
 
 class EditDocSerializer(serializers.ModelSerializer):

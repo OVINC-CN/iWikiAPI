@@ -14,7 +14,7 @@ class UserWhitelistMiddleware(MiddlewareMixin):
     # pylint: disable=R1710
     def process_request(self, request):
         # ignore account url
-        if request.path.startswith("/account/"):
+        if request.path.startswith("/account/") or request.path.startswith("/health/"):
             return
 
         # empty whitelist

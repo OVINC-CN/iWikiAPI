@@ -18,14 +18,4 @@ app.conf.beat_schedule = {
         "schedule": crontab(minute="0"),
         "args": (),
     },
-    "build_rss": {
-        "task": "apps.doc.tasks.build_rss",
-        "schedule": crontab(minute="0"),
-        "args": (),
-    },
-    "generate_sitemap": {
-        "task": "apps.home.tasks.generate_sitemap",
-        "schedule": crontab(minute="0"),
-        "args": (),
-    },
 }

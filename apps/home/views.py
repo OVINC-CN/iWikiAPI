@@ -1,15 +1,19 @@
 from django.conf import settings
 from django.conf.global_settings import LANGUAGE_COOKIE_NAME
 from django.contrib.auth import get_user_model
-from django.http import HttpResponse
+from django.core.cache import cache
+from django.db import connection
 from ovinc_client.account.models import User
 from ovinc_client.account.serializers import UserInfoSerializer
 from ovinc_client.core.auth import SessionAuthenticate
+from ovinc_client.core.logger import logger
 from ovinc_client.core.viewsets import ListMixin, MainViewSet
+from redis import ConnectionError as RedisConnectionError
+from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from apps.home.serializers import I18nRequestSerializer
-from apps.home.utils import Sitemap
 
 USER_MODEL: User = get_user_model()
 
@@ -27,15 +31,32 @@ class HomeView(MainViewSet):
         return Response({"resp": msg, "user": UserInfoSerializer(instance=request.user).data})
 
 
-class SitemapView(ListMixin, MainViewSet):
+class HealthViewSet(MainViewSet):
     """
-    Sitemap View
+    Health Check
     """
 
-    authentication_classes = [SessionAuthenticate]
+    authentication_classes = []
+    enable_record_log = False
 
-    def list(self, request, *args, **kwargs):
-        return HttpResponse(content=Sitemap().tree.toxml(), content_type="application/xml")
+    @action(methods=["GET"], detail=False)
+    def health(self, request, *args, **kwargs):
+        # database ping
+        try:
+            connection.ensure_connection()
+        except Exception as err:  # pylint: disable=broad-except
+            logger.exception("[Healthy] database connection error: %s", err)
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR, data="database connection error")
+        # redis ping
+        try:
+            result = cache.client.get_client().ping()
+            if not result:
+                raise RedisConnectionError("redis ping failed")
+        except Exception as err:  # pylint: disable=broad-except
+            logger.exception("[Healthy] redis connection error: %s", err)
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR, data="redis connection error")
+        # success
+        return Response()
 
 
 class I18nViewSet(MainViewSet):
@@ -86,6 +107,6 @@ class FeatureView(ListMixin, MainViewSet):
         return Response(
             data={
                 # Encrypt disabled and search type configured
-                "doc_fuzzy_search": (not settings.ENABLE_BKCRYPTO and bool(settings.DOC_SEARCH_TYPE))
+                "doc_fuzzy_search": bool(settings.DOC_SEARCH_TYPE)
             }
         )

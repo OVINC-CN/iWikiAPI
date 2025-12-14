@@ -54,7 +54,7 @@ class Migration(migrations.Migration):
                 "verbose_name_plural": "User Permission",
                 "ordering": ["-authed_at"],
                 "unique_together": {("user", "permission_item")},
-                "index_together": {("user", "permission_item", "expired_at"), ("user", "expired_at")},
+                "index_together": {("user", "expired_at"), ("user", "permission_item", "expired_at")},
             },
         ),
     ]
