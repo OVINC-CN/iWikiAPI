@@ -222,9 +222,8 @@ QCLOUD_SECRET_ID = os.getenv("QCLOUD_SECRET_ID")
 QCLOUD_SECRET_KEY = os.getenv("QCLOUD_SECRET_KEY")
 
 # CDN
-QCLOUD_CDN_SIGN_KEY_URL_PARAM = os.getenv("QCLOUD_CDN_SIGN_KEY_URL_PARAM", "sign")
+QCLOUD_CDN_SIGN_KEY_URL_PARAM = os.getenv("QCLOUD_CDN_SIGN_KEY_URL_PARAM", "eo-sign")
 QCLOUD_CDN_SIGN_KEY = os.getenv("QCLOUD_CDN_SIGN_KEY")
-QCLOUD_CDN_SIGN_CACHE_TIMEOUT = int(os.getenv("QCLOUD_CDN_SIGN_CACHE_TIMEOUT", "60"))
 
 # COS
 QCLOUD_COS_REGION = os.getenv("QCLOUD_COS_REGION", "ap-beijing")
@@ -234,7 +233,11 @@ QCLOUD_API_DOMAIN_TMPL = os.getenv("QCLOUD_API_DOMAIN_TMPL", "{}.tencentcloudapi
 QCLOUD_API_SCHEME = os.getenv("QCLOUD_API_SCHEME", "https")
 QCLOUD_STS_EXPIRE_TIME = int(os.getenv("QCLOUD_STS_EXPIRE_TIME", str(60 * 10)))
 QCLOUD_COS_IMAGE_FORMAT = os.getenv("QCLOUD_COS_IMAGE_FORMAT", "imageMogr2/quality/80/format/webp/interlace/1")
-QCLOUD_COS_IMAGE_SUFFIX = ["jpg", "jpeg", "png", "bmp", "webp", "tiff", "gif", "avif", "heif", "heic", "tpg", "apng"]
+QCLOUD_COS_IMAGE_SUFFIX = [
+    i.strip()
+    for i in os.getenv("QCLOUD_COS_IMAGE_SUFFIX", "jpg,jpeg,png,bmp,webp,tiff,gif,avif,heif,heic,tpg,apng").split(",")
+    if i.strip()
+]
 QCLOUD_COS_MAX_FILE_SIZE = int(os.getenv("QCLOUD_COS_MAX_FILE_SIZE", str(10 * 1024 * 1024)))  # Byte
 
 # Captcha
@@ -251,7 +254,3 @@ USER_WHITELIST = [u for u in os.getenv("USER_WHITELIST", "").split(",") if u]
 # Doc
 # One of DocSearchType
 DOC_SEARCH_TYPE = os.getenv("DOC_SEARCH_TYPE", "all")
-DOC_RSS_BUILD_SIZE = int(os.getenv("DOC_RSS_BUILD_SIZE", "100"))
-DOC_RSS_BUILD_TITLE = os.getenv("DOC_RSS_BUILD_TITLE")
-DOC_RSS_BUILD_DESCRIPTION = os.getenv("DOC_RSS_BUILD_DESCRIPTION")
-DOC_RSS_BUILD_PATH = os.getenv("DOC_RSS_BUILD_PATH", "rss.xml")
