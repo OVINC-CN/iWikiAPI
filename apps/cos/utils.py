@@ -11,7 +11,6 @@ from urllib.parse import (
 )
 
 from django.conf import settings
-from django.core.cache import cache
 from django_redis.client import DefaultClient
 from ovinc_client.core.utils import uniq_id_without_time
 
@@ -60,30 +59,12 @@ class TCloudUrlParser:
 
     @classmethod
     def sign(cls, hostname: str, path: str) -> str:
-        # load cache
-        full_signature = cls.get_sign_cache(hostname=hostname, path=path)
-        if full_signature:
-            return full_signature
-        # build new signature
         timestamp = int(time.time())
         nonce = uniq_id_without_time()
         uid = "0"
         signature = md5(f"{path}-{timestamp}-{nonce}-{uid}-{settings.QCLOUD_CDN_SIGN_KEY}".encode()).hexdigest()
         full_signature = f"{timestamp}-{nonce}-{uid}-{signature}"
-        cls.set_sign_cache(hostname=hostname, path=path, full_signature=full_signature)
         return full_signature
-
-    @classmethod
-    def get_sign_cache(cls, hostname: str, path: str) -> str | None:
-        return cache.get(key=cls.build_sign_cache_key(hostname=hostname, path=path))
-
-    @classmethod
-    def set_sign_cache(cls, hostname: str, path: str, full_signature: str) -> None:
-        cache.set(
-            key=cls.build_sign_cache_key(hostname=hostname, path=path),
-            value=full_signature,
-            timeout=settings.QCLOUD_CDN_SIGN_CACHE_TIMEOUT,
-        )
 
     @classmethod
     def build_sign_cache_key(cls, hostname: str, path: str) -> str:
