@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "sslserver",
+    "ovinc_client",
     "ovinc_client.account",
     "ovinc_client.trace",
     "apps.bk_crypto",
@@ -55,6 +56,7 @@ INSTALLED_APPS = [
 ]
 
 # MIDDLEWARE
+# pylint: disable=C0103
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "ovinc_client.core.middlewares.CSRFExemptMiddleware",
