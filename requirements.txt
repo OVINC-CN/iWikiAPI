@@ -26,9 +26,3 @@ tencentcloud-sdk-python==3.0.1470
 # tcloud
 qcloud-python-sts==3.1.5
 cos-python-sdk-v5==1.9.25
-
-# crypto
-bk-crypto-python-sdk==2.0.1
-
-# RSS
-PyRSS2Gen==1.1

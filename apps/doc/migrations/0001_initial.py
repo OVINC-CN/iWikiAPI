@@ -1,6 +1,5 @@
 # pylint: disable=C0103,R0801
 
-import bkcrypto.contrib.django.fields
 import django.db.models.deletion
 import ovinc_client.core.models
 import ovinc_client.core.utils
@@ -30,12 +29,9 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("title", bkcrypto.contrib.django.fields.SymmetricTextField(using="default", verbose_name="Title")),
-                ("content", bkcrypto.contrib.django.fields.SymmetricTextField(using="default", verbose_name="Content")),
-                (
-                    "header_img",
-                    bkcrypto.contrib.django.fields.SymmetricTextField(using="default", verbose_name="Header Image"),
-                ),
+                ("title", models.TextField(verbose_name="Title")),
+                ("content", models.TextField(verbose_name="Content")),
+                ("header_img", models.TextField(blank=True, null=True, verbose_name="Header Image")),
                 ("is_public", models.BooleanField(db_index=True, default=False, verbose_name="Is Public")),
                 ("pv", models.BigIntegerField(db_index=True, default=int, verbose_name="PV")),
                 ("updated_at", models.DateTimeField(db_index=True, verbose_name="Updated Time")),
@@ -91,12 +87,9 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("title", bkcrypto.contrib.django.fields.SymmetricTextField(using="default", verbose_name="Title")),
-                ("content", bkcrypto.contrib.django.fields.SymmetricTextField(using="default", verbose_name="Content")),
-                (
-                    "header_img",
-                    bkcrypto.contrib.django.fields.SymmetricTextField(using="default", verbose_name="Header Image"),
-                ),
+                ("title", models.TextField(verbose_name="Title")),
+                ("content", models.TextField(verbose_name="Content")),
+                ("header_img", models.TextField(blank=True, null=True, verbose_name="Header Image")),
                 ("is_public", models.BooleanField(db_index=True, default=False, verbose_name="Is Public")),
                 ("pv", models.BigIntegerField(db_index=True, default=int, verbose_name="PV")),
                 ("updated_at", models.DateTimeField(db_index=True, verbose_name="Updated Time")),
@@ -131,7 +124,7 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("content", bkcrypto.contrib.django.fields.SymmetricTextField(using="default", verbose_name="Content")),
+                ("content", models.TextField(verbose_name="Content")),
                 ("updated_at", models.DateTimeField(db_index=True, verbose_name="Updated Time")),
                 ("created_at", models.DateTimeField(db_index=True, verbose_name="Created Time")),
                 ("deleted_at", models.DateTimeField(db_index=True, verbose_name="Deleted Time")),
@@ -173,7 +166,7 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("content", bkcrypto.contrib.django.fields.SymmetricTextField(using="default", verbose_name="Content")),
+                ("content", models.TextField(verbose_name="Content")),
                 ("updated_at", models.DateTimeField(db_index=True, verbose_name="Updated Time")),
                 ("created_at", models.DateTimeField(db_index=True, verbose_name="Created Time")),
                 (

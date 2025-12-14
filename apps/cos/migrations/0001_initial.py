@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("filename", models.CharField(max_length=255, verbose_name="File Name")),
-                ("key", models.CharField(max_length=255, unique=True, verbose_name="File Path Prefix")),
+                ("key", models.CharField(max_length=255, unique=True, verbose_name="File Path")),
                 ("resp", models.JSONField(blank=True, null=True, verbose_name="Response")),
                 ("uploaded_at", models.DateTimeField(auto_now_add=True, db_index=True, verbose_name="Uploaded Time")),
                 (

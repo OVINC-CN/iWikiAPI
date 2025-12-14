@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 
 import pymysql
-from bkcrypto.constants import SymmetricCipherType
 from environ import environ
 from ovinc_client.core.logger import get_logging_config_dict
 from ovinc_client.core.utils import getenv_or_raise, strtobool
@@ -47,7 +46,6 @@ INSTALLED_APPS = [
     "ovinc_client",
     "ovinc_client.account",
     "ovinc_client.trace",
-    "apps.bk_crypto",
     "apps.cel",
     "apps.cos",
     "apps.doc",
@@ -209,13 +207,6 @@ RUM_HOST = os.getenv("RUM_HOST", "https://rumt-zh.com")
 # OVINC
 OVINC_API_DOMAIN = getenv_or_raise("OVINC_API_DOMAIN")
 OVINC_WEB_URL = getenv_or_raise("OVINC_WEB_URL")
-
-# Crypto (using encryption may significantly impact server performance)
-ENABLE_BKCRYPTO = strtobool(os.getenv("ENABLE_BKCRYPTO", "False"))
-BKCRYPTO = {
-    "SYMMETRIC_CIPHER_TYPE": SymmetricCipherType.SM4.value,
-    "SYMMETRIC_CIPHERS": {"default": {"common": {"key": APP_SECRET}}},
-}
 
 # QCLOUD
 QCLOUD_SECRET_ID = os.getenv("QCLOUD_SECRET_ID")

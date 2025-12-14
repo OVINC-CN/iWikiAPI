@@ -8,7 +8,6 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy
 from ovinc_client.core.models import BaseModel, ForeignKey, UniqIDField
 
-from apps.bk_crypto.models import SymmetricTextField
 from apps.doc.models.tag import DocTag, Tag
 
 
@@ -18,9 +17,9 @@ class DocBase(BaseModel):
     """
 
     id = UniqIDField(gettext_lazy("ID"), primary_key=True)
-    title = SymmetricTextField(gettext_lazy("Title"))
-    content = SymmetricTextField(gettext_lazy("Content"))
-    header_img = SymmetricTextField(gettext_lazy("Header Image"), null=True, blank=True)
+    title = models.TextField(gettext_lazy("Title"))
+    content = models.TextField(gettext_lazy("Content"))
+    header_img = models.TextField(gettext_lazy("Header Image"), null=True, blank=True)
     is_public = models.BooleanField(gettext_lazy("Is Public"), default=False, db_index=True)
     pv = models.BigIntegerField(gettext_lazy("PV"), default=int, db_index=True)
     owner = ForeignKey(gettext_lazy("Owner"), to="account.User", on_delete=models.CASCADE)

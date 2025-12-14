@@ -5,8 +5,6 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy
 from ovinc_client.core.models import BaseModel, ForeignKey, UniqIDField
 
-from apps.bk_crypto.models import SymmetricTextField
-
 
 class CommentBase(BaseModel):
     """
@@ -15,7 +13,7 @@ class CommentBase(BaseModel):
 
     id = UniqIDField(gettext_lazy("ID"), primary_key=True)
     doc = ForeignKey(gettext_lazy("Doc"), to="doc.Doc", on_delete=models.CASCADE)
-    content = SymmetricTextField(gettext_lazy("Content"))
+    content = models.TextField(gettext_lazy("Content"))
     owner = ForeignKey(gettext_lazy("Owner"), to="account.User", on_delete=models.CASCADE)
     updated_at = models.DateTimeField(gettext_lazy("Updated Time"), db_index=True)
     created_at = models.DateTimeField(gettext_lazy("Created Time"), db_index=True)

@@ -86,6 +86,6 @@ class FeatureView(ListMixin, MainViewSet):
         return Response(
             data={
                 # Encrypt disabled and search type configured
-                "doc_fuzzy_search": (not settings.ENABLE_BKCRYPTO and bool(settings.DOC_SEARCH_TYPE))
+                "doc_fuzzy_search": bool(settings.DOC_SEARCH_TYPE)
             }
         )
