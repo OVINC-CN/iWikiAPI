@@ -27,7 +27,10 @@ class UserPermission(BaseModel):
         verbose_name_plural = verbose_name
         ordering = ["-authed_at"]
         unique_together = [["user", "permission_item"]]
-        index_together = [["user", "permission_item", "expired_at"], ["user", "expired_at"]]
+        indexes = [
+            models.Index(fields=["user", "permission_item", "expired_at"]),
+            models.Index(fields=["user", "expired_at"]),
+        ]
 
     def __str__(self) -> str:
         return f"{self.user}:{self.permission_item}"
