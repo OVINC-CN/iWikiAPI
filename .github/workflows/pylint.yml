@@ -28,6 +28,7 @@ jobs:
         pip install -r requirements.txt
     - name: Django Check
       run: |
+        cp env.example .env
         python manage.py check
     - name: Analysing the code with pylint
       run: |
