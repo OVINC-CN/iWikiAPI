@@ -1,6 +1,6 @@
 import traceback
 from io import BytesIO
-from urllib.parse import quote, urlparse
+from urllib.parse import urlparse
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -60,7 +60,7 @@ class STSClient:
                 expired_time=response["expiredTime"],
                 cdn_sign=TCloudUrlParser.sign(
                     hostname=urlparse(settings.QCLOUD_COS_URL).hostname,
-                    path="/" + quote(cos_log.key.lstrip("/"), safe=""),
+                    path="/" + cos_log.key.lstrip("/"),
                 ),
                 image_format=settings.QCLOUD_COS_IMAGE_FORMAT
                 if cos_log.key.split(".")[-1] in settings.QCLOUD_COS_IMAGE_SUFFIX

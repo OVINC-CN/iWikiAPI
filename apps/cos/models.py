@@ -1,3 +1,4 @@
+import uuid
 from dataclasses import dataclass
 
 from django.conf import settings
@@ -28,6 +29,12 @@ class COSLog(BaseModel):
 
     @classmethod
     def build_key(cls, filename: str) -> str:
+        # replace filename to uuid
+        parts = filename.split(".")
+        if len(parts) > 1:
+            filename = f"{uuid.uuid4().hex}.{'.'.join(parts[1:])}"
+        else:
+            filename = uuid.uuid4().hex
         return (
             f"upload/"
             f"{timezone.now().astimezone(timezone.get_default_timezone()).strftime('%Y%m/%d')}/"
