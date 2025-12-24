@@ -32,7 +32,7 @@ class COSLog(BaseModel):
         # replace filename to uuid
         parts = filename.split(".")
         if len(parts) > 1:
-            filename = f"{uuid.uuid4().hex}.{'.'.join(parts[1:])}"
+            filename = f"{uuid.uuid4().hex}.{parts[-1]}"
         else:
             filename = uuid.uuid4().hex
         return (
